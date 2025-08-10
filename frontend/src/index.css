@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+  
+  body {
+    @apply font-sans text-neutral-100 bg-neutral-950 leading-relaxed;
+  }
+  
+  code {
+    @apply font-mono;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4;
+  }
+  
+  .loading-container {
+    @apply flex justify-center items-center min-h-screen text-lg text-neutral-300 bg-neutral-950;
+  }
+  
+  .btn-base {
+    @apply inline-flex items-center justify-center px-6 py-3 border-none rounded-md no-underline font-medium transition-all duration-300 cursor-pointer text-center;
+  }
+  
+  .btn-primary {
+    @apply btn-base bg-emerald-500 text-neutral-900 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50;
+  }
+  
+  .btn-secondary {
+    @apply btn-base bg-transparent text-emerald-300 border-2 border-emerald-500/40 hover:bg-emerald-500/10;
+  }
+  
+  .btn-success {
+    @apply btn-base bg-emerald-500 text-neutral-900 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50;
+  }
+  
+  .btn-danger {
+    @apply btn-base bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50;
+  }
+  
+  .btn-full {
+    @apply w-full;
+  }
+  
+  .form-input {
+    @apply w-full px-3 py-3 border-2 border-neutral-700 bg-neutral-900 text-neutral-100 rounded-md text-base transition-colors duration-300 focus:outline-none focus:border-emerald-500;
+  }
+  
+  .form-label {
+    @apply block mb-2 text-neutral-200 font-semibold text-sm;
+  }
+  
+  .form-group {
+    @apply mb-4;
+  }
+  
+  .card {
+    @apply bg-neutral-900 border border-neutral-800 rounded-lg p-6 shadow-soft;
+  }
+  
+  .card-hover {
+    @apply card transition-transform duration-200 hover:-translate-y-1 hover:shadow-medium hover:border-neutral-700/80;
+  }
+  
+  .status-badge {
+    @apply text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-500;
+  }
+  
+  .status-approved {
+    @apply bg-emerald-500;
+  }
+  
+  .status-rejected {
+    @apply bg-red-500;
+  }
+  
+  .status-needs-revision {
+    @apply bg-orange-500;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .shadow-medium {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  .shadow-hard {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  }
+}
