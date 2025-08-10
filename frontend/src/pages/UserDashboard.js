@@ -41,13 +41,36 @@ export default function UserDashboard() {
   useEffect(() => {
     fetchEvents()
     generateNotifications()
+
+    // Listen for the custom events from header
+    const handleOpenEventForm = () => {
+      setShowEventForm(true)
+    }
+
+    const handleOpenNotifications = () => {
+      setShowNotifications(true)
+    }
+
+    window.addEventListener('openEventForm', handleOpenEventForm)
+    window.addEventListener('openNotifications', handleOpenNotifications)
+
+    return () => {
+      window.removeEventListener('openEventForm', handleOpenEventForm)
+      window.removeEventListener('openNotifications', handleOpenNotifications)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchEvents = async () => {
     try {
       const response = await eventsAPI.getMyEvents()
-      setEvents(response?.data?.data || [])
+      const eventsData = response?.data?.data || []
+      setEvents(eventsData)
+      
+      // Generate notifications after events are fetched
+      setTimeout(() => {
+        generateNotifications()
+      }, 100)
     } catch (error) {
       console.error("Failed to fetch events:", error)
     } finally {
@@ -57,7 +80,7 @@ export default function UserDashboard() {
 
   const generateNotifications = () => {
     const now = new Date()
-    const notifications = []
+    const newNotifications = []
 
     events.forEach(event => {
       const eventDate = new Date(event.eventDate || event.date)
@@ -66,7 +89,7 @@ export default function UserDashboard() {
 
       // Upcoming events (next 7 days)
       if (daysDiff >= 0 && daysDiff <= 7 && event.status === 'approved') {
-        notifications.push({
+        newNotifications.push({
           id: `upcoming-${event._id}`,
           type: 'upcoming',
           title: `Upcoming Event: ${event.title}`,
@@ -81,7 +104,7 @@ export default function UserDashboard() {
         const submitDate = new Date(event.createdAt || event.submittedAt)
         const pendingDays = Math.ceil((now.getTime() - submitDate.getTime()) / (1000 * 3600 * 24))
         if (pendingDays > 3) {
-          notifications.push({
+          newNotifications.push({
             id: `pending-${event._id}`,
             type: 'pending',
             title: `Event Pending Review`,
@@ -93,7 +116,7 @@ export default function UserDashboard() {
       }
     })
 
-    setNotifications(notifications)
+    setNotifications(newNotifications)
   }
 
   const fetchTemplates = async () => {

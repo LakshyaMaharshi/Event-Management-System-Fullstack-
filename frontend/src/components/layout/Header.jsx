@@ -19,8 +19,21 @@ const Header = () => {
       navigate('/admin');
     } else {
       navigate('/dashboard');
+      // Trigger event form modal opening
+      window.dispatchEvent(new CustomEvent('openEventForm'));
     }
-    // You can add logic to open the event form modal here
+  };
+
+  const handleNotifications = () => {
+    if (user?.role === 'admin') {
+      navigate('/admin');
+    } else {
+      navigate('/dashboard');
+      // Trigger notifications modal opening
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('openNotifications'));
+      }, 200);
+    }
   };
 
   return (
@@ -37,24 +50,22 @@ const Header = () => {
         {isAuthenticated ? (
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             {user?.role !== 'admin' && (
-              <div className="flex items-center gap-4">
-                <Button
-                  onClick={handleCreateEvent}
-                  variant="ghost"
-                  className="text-emerald-300 hover:text-emerald-400 hover:bg-emerald-500/10"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create Event
-                </Button>
-                <Link
-                  to={user?.role === 'admin' ? '/admin' : '/dashboard'}
-                  className="flex items-center gap-2 hover:text-emerald-400"
-                >
-                  <Bell className="h-4 w-4" />
-                  Notifications
-                </Link>
-              </div>
+              <Button
+                onClick={handleCreateEvent}
+                variant="ghost"
+                className="text-emerald-300 hover:text-emerald-400 hover:bg-emerald-500/10"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create Event
+              </Button>
             )}
+            <button
+              onClick={handleNotifications}
+              className="flex items-center gap-2 hover:text-emerald-400 bg-transparent border-0 text-neutral-300 cursor-pointer"
+            >
+              <Bell className="h-4 w-4" />
+              Notifications
+            </button>
           </nav>
         ) : (
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
