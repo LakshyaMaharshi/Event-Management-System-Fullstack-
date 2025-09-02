@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Event = require('../models/Event');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
-const { sendEmail, emailTemplates } = require('../utils/sendEmail');
+const { sendNotification, notificationTemplates } = require('../utils/notifications');
 
 const router = express.Router();
 
@@ -39,19 +39,9 @@ router.post('/', protect, [
 
     const event = await Event.create(eventData);
 
-    // Send confirmation email with event details
-    const emailData = emailTemplates.eventSubmitted(req.user.name, event.title, {
-      eventDate: event.eventDate,
-      eventTime: event.eventTime,
-      venue: event.venue,
-      capacity: event.capacity,
-      category: event.category,
-      priority: event.priority
-    });
-    await sendEmail({
-      email: req.user.email,
-      ...emailData,
-    });
+    // Send notification instead of email
+    const notificationTemplate = notificationTemplates.eventSubmitted(req.user.name, event.title);
+    await sendNotification(req.user.id, notificationTemplate, event._id);
 
     res.status(201).json({
       success: true,

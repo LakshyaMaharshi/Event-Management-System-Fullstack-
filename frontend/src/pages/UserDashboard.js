@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
-import { eventsAPI } from "../services/api"
+import { eventsAPI, notificationsAPI } from "../services/api"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
 import StatusBadge, { PriorityBadge } from "../components/status-badge"
@@ -22,6 +22,7 @@ export default function UserDashboard() {
   const [filterStatus, setFilterStatus] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [notifications, setNotifications] = useState([])
+  const [unreadCount, setUnreadCount] = useState(0)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -33,14 +34,13 @@ export default function UserDashboard() {
     category: "meeting",
     priority: "medium",
     estimatedCost: "",
-    tags: "",
     requirements: "",
     contactPerson: { name: "", email: "", phone: "" },
   })
 
   useEffect(() => {
     fetchEvents()
-    generateNotifications()
+    fetchNotifications()
 
     // Listen for the custom events from header
     const handleOpenEventForm = () => {
@@ -66,11 +66,6 @@ export default function UserDashboard() {
       const response = await eventsAPI.getMyEvents()
       const eventsData = response?.data?.data || []
       setEvents(eventsData)
-      
-      // Generate notifications after events are fetched
-      setTimeout(() => {
-        generateNotifications()
-      }, 100)
     } catch (error) {
       console.error("Failed to fetch events:", error)
     } finally {
@@ -78,45 +73,15 @@ export default function UserDashboard() {
     }
   }
 
-  const generateNotifications = () => {
-    const now = new Date()
-    const newNotifications = []
-
-    events.forEach(event => {
-      const eventDate = new Date(event.eventDate || event.date)
-      const timeDiff = eventDate.getTime() - now.getTime()
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24))
-
-      // Upcoming events (next 7 days)
-      if (daysDiff >= 0 && daysDiff <= 7 && event.status === 'approved') {
-        newNotifications.push({
-          id: `upcoming-${event._id}`,
-          type: 'upcoming',
-          title: `Upcoming Event: ${event.title}`,
-          message: `Your event "${event.title}" is scheduled for ${daysDiff === 0 ? 'today' : daysDiff === 1 ? 'tomorrow' : `in ${daysDiff} days`}`,
-          event: event,
-          urgent: daysDiff <= 1
-        })
-      }
-
-      // Pending events that need follow-up
-      if (event.status === 'pending') {
-        const submitDate = new Date(event.createdAt || event.submittedAt)
-        const pendingDays = Math.ceil((now.getTime() - submitDate.getTime()) / (1000 * 3600 * 24))
-        if (pendingDays > 3) {
-          newNotifications.push({
-            id: `pending-${event._id}`,
-            type: 'pending',
-            title: `Event Pending Review`,
-            message: `Your event "${event.title}" has been pending for ${pendingDays} days`,
-            event: event,
-            urgent: pendingDays > 7
-          })
-        }
-      }
-    })
-
-    setNotifications(newNotifications)
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationsAPI.getNotifications({ unreadOnly: false })
+      const notificationsData = response?.data?.data || []
+      setNotifications(notificationsData)
+      setUnreadCount(response?.data?.unreadCount || 0)
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error)
+    }
   }
 
   const fetchTemplates = async () => {
@@ -154,8 +119,14 @@ export default function UserDashboard() {
     }
   }
 
-  const handleMarkAsRead = (notificationId) => {
-    setNotifications(prev => prev.filter(n => n.id !== notificationId))
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await notificationsAPI.markAsRead(notificationId)
+      setNotifications(prev => prev.filter(n => n._id !== notificationId))
+      setUnreadCount(prev => Math.max(0, prev - 1))
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error)
+    }
   }
 
   const handleEventAction = async (eventId, action) => {
@@ -208,12 +179,43 @@ export default function UserDashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    // Validate required fields
+    const requiredFields = [
+      { field: 'title', name: 'Event Title' },
+      { field: 'description', name: 'Description' },
+      { field: 'eventDate', name: 'Event Date' },
+      { field: 'eventTime', name: 'Event Time' },
+      { field: 'duration', name: 'Duration' },
+      { field: 'venue', name: 'Venue' },
+      { field: 'capacity', name: 'Capacity' },
+      { field: 'category', name: 'Category' }
+    ]
+    
+    const missingFields = requiredFields.filter(({ field }) => !formData[field] || formData[field].toString().trim() === '')
+    
+    if (missingFields.length > 0) {
+      const fieldNames = missingFields.map(({ name }) => name).join(', ')
+      alert(`Please fill in all required fields: ${fieldNames}`)
+      return
+    }
+    
+    // Validate capacity is a positive number
+    if (isNaN(formData.capacity) || parseInt(formData.capacity) <= 0) {
+      alert("Please enter a valid capacity (positive number)")
+      return
+    }
+    
     try {
       const submitData = {
         ...formData,
-        tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean),
+        capacity: parseInt(formData.capacity), // Ensure capacity is not automatically decreased
         estimatedCost: formData.estimatedCost ? parseFloat(formData.estimatedCost) : undefined,
       }
+      
+      // Remove tags field completely as per requirement 1.3
+      delete submitData.tags
+      
       await eventsAPI.createEvent(submitData)
       setShowEventForm(false)
       resetForm()
@@ -237,7 +239,6 @@ export default function UserDashboard() {
       category: "meeting",
       priority: "medium",
       estimatedCost: "",
-      tags: "",
       requirements: "",
       contactPerson: { name: "", email: "", phone: "" },
     })
@@ -497,24 +498,6 @@ function EventCard({ event, onAction }) {
         </div>
 
         {/* Tags */}
-        {event.tags && event.tags.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
-            {event.tags.slice(0, 3).map((tag, index) => (
-              <span
-                key={index}
-                className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-xs text-emerald-300"
-              >
-                #{tag}
-              </span>
-            ))}
-            {event.tags.length > 3 && (
-              <span className="rounded-full bg-neutral-700 border border-neutral-600 px-3 py-1 text-xs text-neutral-400">
-                +{event.tags.length - 3} more
-              </span>
-            )}
-          </div>
-        )}
-
         {/* Review Notes */}
         {event.reviewNotes && (
           <div className="mb-4 rounded-md border-l-4 border-emerald-500/50 bg-emerald-500/10 p-3">
@@ -660,7 +643,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                     ]}
                   />
                 </FormGroup>
-                <FormGroup label="Estimated Cost" htmlFor="estimatedCost">
+                <FormGroup label="Estimated Cost (In GBP)" htmlFor="estimatedCost">
                   <Input
                     type="number"
                     id="estimatedCost"
@@ -673,17 +656,6 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                   />
                 </FormGroup>
               </div>
-
-              {/* Tags */}
-              <FormGroup label="Tags" htmlFor="tags" hint="Separate tags with commas (e.g., team-building, quarterly, remote)">
-                <Input
-                  id="tags"
-                  name="tags"
-                  value={formData.tags}
-                  onChange={onInputChange}
-                  placeholder="team-building, quarterly, remote"
-                />
-              </FormGroup>
 
               <FormGroup label="Special Requirements" htmlFor="requirements">
                 <Textarea
@@ -776,34 +748,46 @@ function NotificationModal({ notifications, onMarkAsRead, onClose }) {
             <div className="space-y-4">
               {notifications.map((notification) => (
                 <div
-                  key={notification.id}
+                  key={notification._id}
                   className={`rounded-lg border p-4 transition-colors ${
-                    notification.urgent 
+                    notification.priority === 'urgent' 
                       ? 'border-red-600 bg-red-500/10' 
-                      : notification.type === 'upcoming' 
+                      : notification.type === 'event_approved' 
                         ? 'border-emerald-600 bg-emerald-500/10'
+                        : notification.type === 'event_denied'
+                        ? 'border-red-600 bg-red-500/10'
                         : 'border-amber-600 bg-amber-500/10'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h3 className="font-semibold text-neutral-100 flex items-center gap-2">
-                        {notification.type === 'upcoming' && <Calendar className="h-4 w-4" />}
-                        {notification.type === 'pending' && <Clock className="h-4 w-4" />}
+                        {notification.type === 'event_approved' && <CheckCircle className="h-4 w-4 text-emerald-400" />}
+                        {notification.type === 'event_denied' && <X className="h-4 w-4 text-red-400" />}
+                        {notification.type === 'event_submitted' && <Clock className="h-4 w-4 text-amber-400" />}
+                        {notification.type === 'event_completed' && <CheckCircle className="h-4 w-4 text-cyan-400" />}
                         {notification.title}
-                        {notification.urgent && (
+                        {notification.priority === 'urgent' && (
                           <span className="px-2 py-1 bg-red-600 text-white text-xs rounded-full">
                             Urgent
                           </span>
                         )}
                       </h3>
                       <p className="mt-1 text-sm text-neutral-300">{notification.message}</p>
-                      <div className="mt-2 text-xs text-neutral-400">
-                        Event: {notification.event.title} • {notification.event.venue}
-                      </div>
+                      {notification.adminNote && (
+                        <div className="mt-2 p-2 bg-neutral-800 rounded text-sm">
+                          <strong className="text-red-400">Admin Note:</strong>
+                          <p className="text-neutral-300 mt-1">{notification.adminNote}</p>
+                        </div>
+                      )}
+                      {notification.eventId && (
+                        <div className="mt-2 text-xs text-neutral-400">
+                          Event: {notification.eventId.title || 'Event'} • {new Date(notification.createdAt).toLocaleDateString()}
+                        </div>
+                      )}
                     </div>
                     <Button
-                      onClick={() => onMarkAsRead(notification.id)}
+                      onClick={() => onMarkAsRead(notification._id)}
                       variant="ghost"
                       size="sm"
                       className="text-neutral-400 hover:text-neutral-100"

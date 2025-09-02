@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { authAPI } from '../services/api'
+import { authAPI, usersAPI } from '../services/api'
 import { Button } from '../components/ui/button'
 import { Card, CardContent } from '../components/ui/card'
 import { 
   User, Mail, Phone, Building, Calendar, Shield, 
-  Edit3, Save, X, Eye, EyeOff, Key, CheckCircle 
+  Edit3, Save, X, Eye, EyeOff, Key, CheckCircle,
+  BarChart3, Clock, CheckCircle2, XCircle
 } from 'lucide-react'
 
 export default function ProfilePage() {
@@ -15,6 +16,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showPasswordForm, setShowPasswordForm] = useState(false)
+  const [userStats, setUserStats] = useState(null)
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',
@@ -41,7 +43,17 @@ export default function ProfilePage() {
         organization: user.organization || '',
       })
     }
+    fetchUserStats()
   }, [user])
+
+  const fetchUserStats = async () => {
+    try {
+      const response = await usersAPI.getUserStats()
+      setUserStats(response.data.data)
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error)
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -88,7 +100,6 @@ export default function ProfilePage() {
 
     setLoading(true)
     try {
-      // Note: You'll need to implement this API endpoint
       const response = await authAPI.changePassword({
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
@@ -98,6 +109,37 @@ export default function ProfilePage() {
         setPasswordData({
           currentPassword: '',
           newPassword: '',
+          confirmPassword: '',
+        })
+        alert('Password changed successfully!')
+      }
+    } catch (error) {
+      console.error('Failed to change password:', error)
+      const errorMessage = error.response?.data?.message || 'Failed to change password. Please try again.'
+      alert(errorMessage)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  if (!user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-950 text-neutral-300">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent"></div>
+          <p className="mt-4">Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
           confirmPassword: '',
         })
         alert('Password changed successfully!')
@@ -191,20 +233,20 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-2 gap-4 py-4 border-t border-neutral-800">
                   <div className="text-center">
                     <div className="text-lg font-semibold text-emerald-400">
-                      {user?.eventsCount || 0}
+                      {userStats?.totalEvents || 0}
                     </div>
-                    <div className="text-xs text-neutral-400">Events</div>
+                    <div className="text-xs text-neutral-400">Total Events</div>
                   </div>
                   <div className="text-center">
                     <div className="text-lg font-semibold text-cyan-400">
-                      <Calendar className="h-5 w-5 mx-auto" />
+                      {userStats?.completedEvents || 0}
                     </div>
-                    <div className="text-xs text-neutral-400">Member Since</div>
+                    <div className="text-xs text-neutral-400">Completed</div>
                   </div>
                 </div>
                 
                 <div className="text-xs text-neutral-400 mt-2">
-                  Joined {getJoinDate()}
+                  Member since {userStats?.memberSince ? formatDate(userStats.memberSince) : 'Unknown'}
                 </div>
               </CardContent>
             </Card>
@@ -464,6 +506,58 @@ export default function ProfilePage() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Event Statistics */}
+            {userStats && (
+              <Card className="border-neutral-800 bg-neutral-900">
+                <div className="border-b border-neutral-800 p-6">
+                  <h3 className="text-lg font-semibold text-neutral-100 flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    Event Statistics
+                  </h3>
+                </div>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center p-4 rounded-lg bg-neutral-800/50">
+                      <div className="text-2xl font-bold text-emerald-400 mb-1">
+                        {userStats.totalEvents}
+                      </div>
+                      <div className="text-sm text-neutral-400">Total Events</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg bg-neutral-800/50">
+                      <div className="text-2xl font-bold text-amber-400 mb-1 flex items-center justify-center gap-1">
+                        <Clock className="h-5 w-5" />
+                        {userStats.pendingEvents}
+                      </div>
+                      <div className="text-sm text-neutral-400">Pending</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg bg-neutral-800/50">
+                      <div className="text-2xl font-bold text-green-400 mb-1 flex items-center justify-center gap-1">
+                        <CheckCircle2 className="h-5 w-5" />
+                        {userStats.approvedEvents}
+                      </div>
+                      <div className="text-sm text-neutral-400">Approved</div>
+                    </div>
+                    <div className="text-center p-4 rounded-lg bg-neutral-800/50">
+                      <div className="text-2xl font-bold text-cyan-400 mb-1">
+                        {userStats.completedEvents}
+                      </div>
+                      <div className="text-sm text-neutral-400">Completed</div>
+                    </div>
+                  </div>
+                  {userStats.deniedEvents > 0 && (
+                    <div className="mt-4 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+                      <div className="flex items-center gap-2 text-red-400">
+                        <XCircle className="h-4 w-4" />
+                        <span className="text-sm">
+                          {userStats.deniedEvents} event{userStats.deniedEvents !== 1 ? 's' : ''} denied
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

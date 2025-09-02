@@ -9,6 +9,7 @@ import ResetPassword from './pages/ResetPassword';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProfilePage from './pages/ProfilePage';
+import ContactPage from './pages/ContactPage';
 import Layout from './components/layout/Layout';
 import './App.css';
 
@@ -80,6 +81,7 @@ const AppRoutes = () => {
             }
           />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/contact" element={<ContactPage />} />
 
           {/* Protected Routes */}
           <Route

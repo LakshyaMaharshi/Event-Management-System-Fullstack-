@@ -312,12 +312,8 @@ const LandingPage = () => {
                   size="lg"
                   variant="outline"
                   className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
-                  onClick={() => {
-                    const element = document.getElementById('contact');
-                    element?.scrollIntoView({ behavior: 'smooth' });
-                  }}
                 >
-                  <span>Schedule Demo</span>
+                  <Link to="/contact">Schedule Demo</Link>
                 </Button>
               </div>
             </div>
@@ -463,14 +459,7 @@ const LandingPage = () => {
                 variant="outline"
                 className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent text-lg px-8 py-6"
               >
-                <button
-                  onClick={() => {
-                    const element = document.getElementById('contact');
-                    element?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  Schedule Demo
-                </button>
+                <Link to="/contact">Schedule Demo</Link>
               </Button>
             </div>
           </div>
@@ -521,10 +510,10 @@ const LandingPage = () => {
               >
                 Why EventFlow
               </button>
-              <Link to="/register" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 Pricing
               </Link>
-              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 API Docs
               </Link>
             </div>
@@ -533,16 +522,16 @@ const LandingPage = () => {
           <div className="space-y-4">
             <span className="font-semibold text-neutral-200 text-lg">Company</span>
             <div className="grid gap-3 text-sm">
-              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 About Us
               </Link>
-              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 Careers
               </Link>
-              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 Blog
               </Link>
-              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+              <Link to="/contact" className="text-neutral-400 hover:text-emerald-300">
                 Press Kit
               </Link>
             </div>
@@ -552,21 +541,21 @@ const LandingPage = () => {
               <div className="flex items-center gap-3">
                 <Link
                   aria-label="Twitter"
-                  to="#"
+                  to="/contact"
                   className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
                 >
                   <Twitter className="h-5 w-5" />
                 </Link>
                 <Link
                   aria-label="Facebook"
-                  to="#"
+                  to="/contact"
                   className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
                 >
                   <Facebook className="h-5 w-5" />
                 </Link>
                 <Link
                   aria-label="LinkedIn"
-                  to="#"
+                  to="/contact"
                   className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
                 >
                   <Linkedin className="h-5 w-5" />

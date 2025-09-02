@@ -84,6 +84,15 @@ export const adminAPI = {
 export const usersAPI = {
   getProfile: () => api.get('/users/profile'),
   updatePreferences: (preferences) => api.put('/users/preferences', { preferences }),
+  getUserStats: () => api.get('/users/stats'),
+};
+
+// Notifications API calls
+export const notificationsAPI = {
+  getNotifications: (params) => api.get('/notifications', { params }),
+  markAsRead: (id) => api.put(`/notifications/${id}/read`),
+  markAllAsRead: () => api.put('/notifications/read-all'),
+  deleteNotification: (id) => api.delete(`/notifications/${id}`),
 };
 
 export default api;

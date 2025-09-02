@@ -2,7 +2,7 @@ const express = require('express');
 const Event = require('../models/Event');
 const User = require('../models/User');
 const { protect, adminOnly } = require('../middleware/auth');
-const { sendEmail, emailTemplates } = require('../utils/sendEmail');
+const { sendNotification, notificationTemplates } = require('../utils/notifications');
 
 const router = express.Router();
 
@@ -112,23 +112,14 @@ router.put('/events/:id/approve', async (req, res) => {
 
     await event.save();
 
-    // Send approval email
-    const emailData = emailTemplates.eventApproved(
+    // Send approval notification instead of email
+    const notificationTemplate = notificationTemplates.eventApproved(
       event.submittedBy.name,
       event.title,
-      {
-        eventDate: event.eventDate,
-        eventTime: event.eventTime,
-        venue: event.venue,
-        capacity: event.capacity,
-        category: event.category
-      }
+      req.body.notes || ''
     );
     
-    await sendEmail({
-      email: event.submittedBy.email,
-      ...emailData,
-    });
+    await sendNotification(event.submittedBy._id, notificationTemplate, event._id);
 
     res.status(200).json({
       success: true,
@@ -173,22 +164,14 @@ router.put('/events/:id/deny', async (req, res) => {
 
     await event.save();
 
-    // Send denial email
-    const emailData = emailTemplates.eventDenied(
+    // Send denial notification instead of email
+    const notificationTemplate = notificationTemplates.eventDenied(
       event.submittedBy.name,
       event.title,
-      event.reviewNotes,
-      {
-        eventDate: event.eventDate,
-        eventTime: event.eventTime,
-        venue: event.venue
-      }
+      event.reviewNotes
     );
     
-    await sendEmail({
-      email: event.submittedBy.email,
-      ...emailData,
-    });
+    await sendNotification(event.submittedBy._id, notificationTemplate, event._id);
 
     res.status(200).json({
       success: true,
@@ -228,16 +211,13 @@ router.put('/events/:id/complete', async (req, res) => {
     event.status = 'completed';
     await event.save();
 
-    // Send completion notification email
-    const emailData = emailTemplates.eventCompleted(
+    // Send completion notification instead of email
+    const notificationTemplate = notificationTemplates.eventCompleted(
       event.submittedBy.name,
       event.title
     );
     
-    await sendEmail({
-      email: event.submittedBy.email,
-      ...emailData,
-    });
+    await sendNotification(event.submittedBy._id, notificationTemplate, event._id);
 
     res.status(200).json({
       success: true,

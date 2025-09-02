@@ -8,14 +8,14 @@ import { Card, CardContent } from "../components/ui/card"
 import StatusBadge, { PriorityBadge } from "../components/status-badge"
 import { 
   Calendar, Clock, MapPin, Users, BarChart3, ClipboardList,
-  CheckCircle2 as CheckCircle, XCircle as X,
+  CheckCircle2 as CheckCircle, XCircle as X, XCircle,
   Zap, Filter, Search, Eye, TrendingUp, Award, AlertTriangle,
   Check, Tag
 } from "lucide-react"
 
 export default function AdminDashboard() {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState("pending") // 'pending' | 'all' | 'analytics'
+  const [activeTab, setActiveTab] = useState("pending") // 'pending' | 'all' | 'analytics' | 'denied'
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [analytics, setAnalytics] = useState(null)
@@ -34,6 +34,10 @@ export default function AdminDashboard() {
       if (activeTab === "pending") {
         const response = await adminAPI.getPendingEvents()
         setEvents(response?.data?.data || [])
+      } else if (activeTab === "denied") {
+        const response = await adminAPI.getAllEvents()
+        const deniedEvents = response?.data?.data?.filter(event => event.status === 'denied') || []
+        setEvents(deniedEvents)
       } else if (activeTab === "all") {
         const response = await adminAPI.getAllEvents()
         setEvents(response?.data?.data || [])
@@ -175,11 +179,15 @@ export default function AdminDashboard() {
               <div className="inline-flex rounded-lg border border-neutral-800 bg-neutral-900 p-1">
                 <TabButton active={activeTab === "pending"} onClick={() => setActiveTab("pending")}>
                   <ClipboardList className="mr-2 h-4 w-4" />
-                  Pending ({events.filter(e => e.status === 'pending').length})
+                  Pending
                 </TabButton>
                 <TabButton active={activeTab === "all"} onClick={() => setActiveTab("all")}>
                   <Users className="mr-2 h-4 w-4" />
                   All Events
+                </TabButton>
+                <TabButton active={activeTab === "denied"} onClick={() => setActiveTab("denied")}>
+                  <XCircle className="mr-2 h-4 w-4" />
+                  Denied
                 </TabButton>
                 <TabButton active={activeTab === "analytics"} onClick={() => setActiveTab("analytics")}>
                   <BarChart3 className="mr-2 h-4 w-4" />
@@ -258,6 +266,38 @@ export default function AdminDashboard() {
                     onView={() => setSelectedEvent(event)}
                     onComplete={() => handleComplete(event._id)}
                     isPending={false}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* Denied Events */}
+        {activeTab === "denied" && (
+          <section className="mt-8">
+            <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Denied Events</h2>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-red-500 border-t-transparent"></div>
+                <p className="mt-4 text-neutral-400">Loading denied events...</p>
+              </div>
+            ) : filteredEvents.length === 0 ? (
+              <div className="text-center py-12">
+                <XCircle className="mx-auto h-12 w-12 text-neutral-600 mb-4" />
+                <p className="text-neutral-400">No denied events found.</p>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {filteredEvents.map((event) => (
+                  <EventCard 
+                    key={event._id} 
+                    event={event} 
+                    onApprove={handleApprove}
+                    onDeny={handleDeny}
+                    onComplete={handleComplete}
+                    onViewDetails={setSelectedEvent}
+                    showActions={false} // Don't show approve/deny actions for denied events
                   />
                 ))}
               </div>
