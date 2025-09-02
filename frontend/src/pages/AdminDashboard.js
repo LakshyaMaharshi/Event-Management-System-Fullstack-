@@ -477,6 +477,30 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
               </p>
             </div>
           )}
+
+          {/* Feedback Summary */}
+          {event.feedback && event.feedback.length > 0 && (
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <span
+                    key={i}
+                    className={`text-xs ${
+                      i < Math.round(event.feedback.reduce((sum, f) => sum + f.rating, 0) / event.feedback.length)
+                        ? 'text-yellow-400' 
+                        : 'text-neutral-600'
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <span className="text-neutral-400">
+                {(event.feedback.reduce((sum, f) => sum + f.rating, 0) / event.feedback.length).toFixed(1)} 
+                ({event.feedback.length} review{event.feedback.length !== 1 ? 's' : ''})
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Actions */}
@@ -698,6 +722,73 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
                 )}
               </div>
             </div>
+
+            {/* Event Feedback */}
+            {event.feedback && event.feedback.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-neutral-400 mb-2">Event Feedback ({event.feedback.length})</h4>
+                <div className="space-y-3">
+                  {event.feedback.map((feedback, index) => (
+                    <div key={index} className="bg-neutral-800 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-neutral-100">
+                            {feedback.user?.name || 'Anonymous'}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <span
+                                key={i}
+                                className={`text-sm ${
+                                  i < feedback.rating ? 'text-yellow-400' : 'text-neutral-600'
+                                }`}
+                              >
+                                ★
+                              </span>
+                            ))}
+                          </div>
+                          <span className="text-sm text-neutral-400">
+                            ({feedback.rating}/5)
+                          </span>
+                        </div>
+                        <span className="text-xs text-neutral-500">
+                          {new Date(feedback.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      {feedback.comment && (
+                        <p className="text-neutral-300 text-sm leading-relaxed">
+                          "{feedback.comment}"
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                  
+                  {/* Average Rating */}
+                  <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-emerald-400 font-medium">Average Rating:</span>
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            className={`text-lg ${
+                              i < Math.round(event.feedback.reduce((sum, f) => sum + f.rating, 0) / event.feedback.length)
+                                ? 'text-yellow-400' 
+                                : 'text-neutral-600'
+                            }`}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-emerald-400 font-semibold">
+                        {(event.feedback.reduce((sum, f) => sum + f.rating, 0) / event.feedback.length).toFixed(1)}/5
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Tags */}
             {event.tags && event.tags.length > 0 && (

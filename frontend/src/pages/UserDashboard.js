@@ -154,6 +154,15 @@ export default function UserDashboard() {
 
   const handleSubmitRating = async (rating, comment) => {
     try {
+      // Check if user has already submitted feedback
+      const userFeedback = selectedEventForRating.feedback?.find(f => f.user === user._id || f.user._id === user._id)
+      if (userFeedback) {
+        alert("You have already submitted feedback for this event!")
+        setShowRatingModal(false)
+        setSelectedEventForRating(null)
+        return
+      }
+
       await eventsAPI.submitFeedback(selectedEventForRating._id, { rating, comment })
       setShowRatingModal(false)
       setSelectedEventForRating(null)
@@ -161,7 +170,8 @@ export default function UserDashboard() {
       alert("Thank you for your feedback!")
     } catch (error) {
       console.error("Failed to submit rating:", error)
-      alert("Failed to submit rating. Please try again.")
+      const errorMessage = error.response?.data?.message || "Failed to submit rating. Please try again."
+      alert(errorMessage)
     }
   }
 
@@ -401,6 +411,7 @@ export default function UserDashboard() {
                   key={event._id}
                   event={event}
                   onAction={handleEventAction}
+                  user={user}
                 />
               ))}
             </div>
@@ -434,7 +445,7 @@ function StatCard({ label, value, icon, color = "neutral" }) {
   )
 }
 
-function EventCard({ event, onAction }) {
+function EventCard({ event, onAction, user }) {
   return (
     <Card className="group border-neutral-800 bg-neutral-900 transition-all hover:border-neutral-700 hover:shadow-lg h-full">
       <CardContent className="p-6 flex flex-col h-full">
@@ -457,7 +468,7 @@ function EventCard({ event, onAction }) {
             >
               <Bell className="h-4 w-4" />
             </Button>
-            {event.status === 'completed' && !event.feedback?.some(f => f.user === event.submittedBy) && (
+            {event.status === 'completed' && !event.feedback?.some(f => f.user === user._id || f.user._id === user._id) && (
               <Button
                 size="sm"
                 variant="ghost"
@@ -500,6 +511,16 @@ function EventCard({ event, onAction }) {
             <DetailRow icon={<Clock className="h-4 w-4" />} label="Duration" value={event.duration} />
           )}
         </div>
+
+        {/* Feedback Status */}
+        {event.status === 'completed' && event.feedback?.some(f => f.user === user._id || f.user._id === user._id) && (
+          <div className="mb-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+            <div className="flex items-center gap-2 text-emerald-400 text-sm">
+              <CheckCircle className="h-4 w-4" />
+              <span>You have submitted feedback for this event</span>
+            </div>
+          </div>
+        )}
 
         {/* Tags */}
         {/* Review Notes */}
