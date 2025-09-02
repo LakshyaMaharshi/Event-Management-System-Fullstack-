@@ -190,23 +190,23 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 py-8">
       <div className="mx-auto max-w-4xl px-4">
-        {/* Page Header */}
+        {}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-neutral-100 mb-2">My Profile</h1>
           <p className="text-neutral-400">Manage your account information and preferences</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Profile Summary Card */}
+          {}
           <div className="lg:col-span-1">
             <Card className="border-neutral-800 bg-neutral-900">
               <CardContent className="p-6 text-center">
-                {/* Avatar */}
+                {}
                 <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 text-2xl font-bold text-neutral-900">
                   {getInitials(user?.name)}
                 </div>
                 
-                {/* Basic Info */}
+                {}
                 <h2 className="text-xl font-semibold text-neutral-100 mb-1">
                   {user?.name || 'User Name'}
                 </h2>
@@ -218,7 +218,7 @@ export default function ProfilePage() {
                   {user?.email || 'user@example.com'}
                 </p>
 
-                {/* Stats */}
+                {}
                 <div className="grid grid-cols-2 gap-4 py-4 border-t border-neutral-800">
                   <div className="text-center">
                     <div className="text-lg font-semibold text-emerald-400">
@@ -241,9 +241,9 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          {/* Profile Details */}
+          {}
           <div className="lg:col-span-2 space-y-6">
-            {/* Personal Information */}
+            {}
             <Card className="border-neutral-800 bg-neutral-900">
               <div className="flex items-center justify-between border-b border-neutral-800 p-6">
                 <h3 className="text-lg font-semibold text-neutral-100">Personal Information</h3>
@@ -368,7 +368,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Security Settings */}
+            {}
             <Card className="border-neutral-800 bg-neutral-900">
               <div className="flex items-center justify-between border-b border-neutral-800 p-6">
                 <h3 className="text-lg font-semibold text-neutral-100">Security Settings</h3>
@@ -496,7 +496,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            {/* Event Statistics */}
+            {}
             {userStats && (
               <Card className="border-neutral-800 bg-neutral-900">
                 <div className="border-b border-neutral-800 p-6">

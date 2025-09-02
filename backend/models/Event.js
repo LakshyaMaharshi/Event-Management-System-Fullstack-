@@ -98,7 +98,6 @@ const eventSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Index for better performance
 eventSchema.index({ submittedBy: 1, status: 1 });
 eventSchema.index({ eventDate: 1 });
 

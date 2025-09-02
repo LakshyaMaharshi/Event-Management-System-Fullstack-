@@ -23,9 +23,9 @@ export default function EventFlowLanding() {
       <EventFlowNavbar />
 
       <main>
-        {/* Hero with premium background */}
+        {}
         <section className="relative overflow-hidden">
-          {/* Premium gradient mesh + photo + grain */}
+          {}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <Image
               src="/backgrounds/eventflow-premium-hero.png"
@@ -76,7 +76,7 @@ export default function EventFlowLanding() {
               <p className="text-xs text-neutral-400">{"No credit card required. Set up in minutes."}</p>
             </div>
 
-            {/* Quick highlights card */}
+            {}
             <Card className="border-neutral-800 bg-neutral-900/60 backdrop-blur">
               <CardContent className="p-6 sm:p-8">
                 <div className="grid gap-6">
@@ -106,7 +106,7 @@ export default function EventFlowLanding() {
           </div>
         </section>
 
-        {/* Features */}
+        {}
         <section id="features" className="border-t border-neutral-800 bg-neutral-950">
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
             <div className="mx-auto max-w-2xl text-center">
@@ -141,7 +141,7 @@ export default function EventFlowLanding() {
           </div>
         </section>
 
-        {/* Why Choose Us */}
+        {}
         <section id="why" className="bg-neutral-950">
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2">
             <div className="space-y-4">
@@ -182,7 +182,7 @@ export default function EventFlowLanding() {
           </div>
         </section>
 
-        {/* Testimonials / Trust */}
+        {}
         <section id="testimonials" className="border-t border-neutral-800 bg-neutral-950">
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
             <div className="mx-auto max-w-3xl text-center">
@@ -205,7 +205,7 @@ export default function EventFlowLanding() {
           </div>
         </section>
 
-        {/* Secondary CTA */}
+        {}
         <section id="cta" className="bg-neutral-950">
           <div className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-16 sm:py-20 lg:grid-cols-[1fr_auto]">
             <div>
@@ -231,7 +231,7 @@ export default function EventFlowLanding() {
         </section>
       </main>
 
-      {/* Footer */}
+      {}
       <footer id="contact" className="border-t border-neutral-800 bg-neutral-950">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-3">

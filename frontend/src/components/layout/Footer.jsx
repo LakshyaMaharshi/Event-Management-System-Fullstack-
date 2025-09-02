@@ -15,16 +15,13 @@ const Footer = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Create mailto link
+
     const subject = encodeURIComponent('Contact from EventFlow Website');
     const body = encodeURIComponent(`From: ${email}\n\nMessage:\n${message}`);
     const mailtoLink = `mailto:mileekakadiya@gmail.com?subject=${subject}&body=${body}`;
-    
-    // Open email client
+
     window.location.href = mailtoLink;
-    
-    // Reset form
+
     setEmail('');
     setMessage('');
     setIsSubmitting(false);
@@ -37,7 +34,7 @@ const Footer = () => {
     <footer className="bg-neutral-900 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Company Info */}
+          {}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-emerald-400">EventFlow</h3>
             <p className="text-neutral-400 text-sm">
@@ -46,7 +43,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-neutral-100">Quick Links</h4>
             <ul className="space-y-2">
@@ -62,7 +59,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          {/* Contact Form */}
+          {}
           <div className="space-y-4" id="contact">
             <h4 className="text-lg font-semibold text-neutral-100">Contact Us</h4>
             <div className="space-y-3">
@@ -103,7 +100,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {}
         <div className="border-t border-neutral-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-neutral-400 text-sm">
             © {currentYear} EventFlow. All rights reserved.

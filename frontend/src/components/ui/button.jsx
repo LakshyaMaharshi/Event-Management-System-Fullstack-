@@ -1,12 +1,10 @@
 import * as React from "react";
 import { cva } from "class-variance-authority";
 
-// Utility function to combine class names (replaces cn from @/lib/utils)
 const cn = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };
 
-// Simple Slot component (replaces @radix-ui/react-slot)
 const Slot = React.forwardRef(({ children, ...props }, ref) => {
   if (React.isValidElement(children)) {
     return React.cloneElement(children, { ...props, ref });

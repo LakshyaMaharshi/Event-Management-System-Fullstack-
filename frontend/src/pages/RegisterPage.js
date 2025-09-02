@@ -29,14 +29,12 @@ const RegisterPage = () => {
     setIsLoading(true);
     setError('');
 
-    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setIsLoading(false);
       return;
     }
 
-    // Remove confirmPassword before sending to API
     const { confirmPassword, ...userData } = formData;
 
     const result = await register(userData);

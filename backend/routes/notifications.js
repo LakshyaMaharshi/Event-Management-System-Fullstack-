@@ -4,9 +4,6 @@ const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
-// @desc    Get user's notifications
-// @route   GET /api/notifications
-// @access  Private
 router.get('/', protect, async (req, res) => {
   try {
     const { page = 1, limit = 20, unreadOnly = false } = req.query;
@@ -46,9 +43,6 @@ router.get('/', protect, async (req, res) => {
   }
 });
 
-// @desc    Mark notification as read
-// @route   PUT /api/notifications/:id/read
-// @access  Private
 router.put('/:id/read', protect, async (req, res) => {
   try {
     const notification = await Notification.findOneAndUpdate(
@@ -77,9 +71,6 @@ router.put('/:id/read', protect, async (req, res) => {
   }
 });
 
-// @desc    Mark all notifications as read
-// @route   PUT /api/notifications/read-all
-// @access  Private
 router.put('/read-all', protect, async (req, res) => {
   try {
     await Notification.updateMany(
@@ -100,9 +91,6 @@ router.put('/read-all', protect, async (req, res) => {
   }
 });
 
-// @desc    Delete notification
-// @route   DELETE /api/notifications/:id
-// @access  Private
 router.delete('/:id', protect, async (req, res) => {
   try {
     const notification = await Notification.findOneAndDelete({

@@ -1,17 +1,14 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Protect routes
 exports.protect = async (req, res, next) => {
   try {
     let token;
 
-    // Get token from header
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
 
-    // Make sure token exists
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -20,10 +17,8 @@ exports.protect = async (req, res, next) => {
     }
 
     try {
-      // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
-      // Get user from token
       req.user = await User.findById(decoded.id);
       
       if (!req.user) {
@@ -48,7 +43,6 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-// Admin only middleware
 exports.adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();

@@ -31,8 +31,7 @@ const ContactPage = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Create mailto link with form data
+
     const subject = encodeURIComponent(`[${formData.type.toUpperCase()}] ${formData.subject || 'Contact from EventFlow'}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\n` +
@@ -41,15 +40,12 @@ const ContactPage = () => {
       `Message:\n${formData.message}`
     );
     const mailtoLink = `mailto:mileekakadiyaworks@gmail.com?subject=${subject}&body=${body}`;
-    
-    // Open email client
+
     window.location.href = mailtoLink;
-    
-    // Show success state
+
     setSubmitted(true);
     setIsSubmitting(false);
-    
-    // Reset form after delay
+
     setTimeout(() => {
       setFormData({
         name: '',
@@ -78,7 +74,7 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {/* Hero Section */}
+      {}
       <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-emerald-950/20">
         <div className="absolute inset-0 opacity-30"
              style={{
@@ -100,11 +96,11 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Contact Content */}
+      {}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Contact Information */}
+            {}
             <div className="space-y-6">
               <Card className="border-neutral-800 bg-neutral-900">
                 <CardContent className="p-6">
@@ -150,7 +146,7 @@ const ContactPage = () => {
               </Card>
             </div>
 
-            {/* Contact Form */}
+            {}
             <div className="lg:col-span-2">
               <Card className="border-neutral-800 bg-neutral-900">
                 <div className="border-b border-neutral-800 p-6">

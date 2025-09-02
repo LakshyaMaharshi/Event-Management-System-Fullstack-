@@ -39,7 +39,7 @@ export default function UserDashboard() {
   useEffect(() => {
     fetchEvents()
     fetchTemplates()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [])
 
   const fetchEvents = async () => {
@@ -189,7 +189,7 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {/* Modern Hero Section */}
+      {}
       <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-emerald-950/20">
         <div className="absolute inset-0 opacity-30"
              style={{
@@ -213,7 +213,7 @@ export default function UserDashboard() {
                 Create, track, and manage all your events in one powerful platform.
               </p>
               
-              {/* Stats Cards */}
+              {}
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <StatCard label="Total Events" value={stats.total} icon={<Layers3 className="h-5 w-5" />} />
                 <StatCard label="Pending" value={stats.pending} icon={<Clock className="h-5 w-5" />} color="amber" />
@@ -222,7 +222,7 @@ export default function UserDashboard() {
               </div>
             </div>
             
-            {/* Action Buttons */}
+            {}
             <div className="mt-8 flex flex-col gap-4 lg:mt-0">
               <Button
                 onClick={() => setShowEventForm(true)}
@@ -244,9 +244,9 @@ export default function UserDashboard() {
         </div>
       </section>
 
-      {/* Main Content */}
+      {}
       <div className="mx-auto w-full max-w-7xl px-4 pb-14">
-        {/* Enhanced Event Form Modal */}
+        {}
         {showEventForm && <EventFormModal 
           formData={formData}
           onInputChange={handleInputChange}
@@ -254,14 +254,14 @@ export default function UserDashboard() {
           onClose={() => { setShowEventForm(false); resetForm(); }}
         />}
 
-        {/* Template Selection Modal */}
+        {}
         {showTemplates && <TemplateModal 
           templates={templates}
           onUseTemplate={handleUseTemplate}
           onClose={() => setShowTemplates(false)}
         />}
 
-        {/* Filters and Search */}
+        {}
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -299,7 +299,7 @@ export default function UserDashboard() {
           </Button>
         </div>
 
-        {/* Events Grid */}
+        {}
         <div className="mt-8">
           <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Your Events</h2>
           {filteredEvents.length === 0 ? (
@@ -321,8 +321,6 @@ export default function UserDashboard() {
     </div>
   )
 }
-
-/* ---------- Modern UI Components ---------- */
 
 function StatCard({ label, value, icon, color = "neutral" }) {
   const colorMap = {
@@ -349,7 +347,7 @@ function EventCard({ event, onDuplicate, onSaveAsTemplate }) {
   return (
     <Card className="group border-neutral-800 bg-neutral-900 transition-all hover:border-neutral-700 hover:shadow-lg">
       <CardContent className="p-6">
-        {/* Header */}
+        {}
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-neutral-100">{event.title}</h3>
@@ -378,10 +376,10 @@ function EventCard({ event, onDuplicate, onSaveAsTemplate }) {
           </div>
         </div>
 
-        {/* Description */}
+        {}
         <p className="mb-4 text-neutral-300 line-clamp-2">{event.description}</p>
 
-        {/* Details Grid */}
+        {}
         <div className="mb-4 space-y-2 text-sm">
           <DetailRow icon={<Calendar className="h-4 w-4" />} label="Date" value={formatDate(event.eventDate)} />
           <DetailRow icon={<Clock className="h-4 w-4" />} label="Time" value={event.eventTime} />
@@ -392,7 +390,7 @@ function EventCard({ event, onDuplicate, onSaveAsTemplate }) {
           )}
         </div>
 
-        {/* Tags */}
+        {}
         {event.tags && event.tags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-1">
             {event.tags.slice(0, 3).map((tag, index) => (
@@ -411,7 +409,7 @@ function EventCard({ event, onDuplicate, onSaveAsTemplate }) {
           </div>
         )}
 
-        {/* Review Notes */}
+        {}
         {event.reviewNotes && (
           <div className="rounded-md border-l-4 border-emerald-500/50 bg-emerald-500/10 p-3">
             <strong className="text-neutral-100">Admin Notes:</strong>
@@ -419,7 +417,7 @@ function EventCard({ event, onDuplicate, onSaveAsTemplate }) {
           </div>
         )}
 
-        {/* Footer */}
+        {}
         <div className="mt-4 flex items-center justify-between border-t border-neutral-800 pt-4 text-xs text-neutral-400">
           <span>Submitted {formatDate(event.createdAt)}</span>
           <span className="capitalize">{event.category}</span>
@@ -447,7 +445,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
           
           <CardContent className="p-6">
             <form onSubmit={onSubmit} className="space-y-6">
-              {/* Basic Info */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Event Title *" htmlFor="title">
                   <Input id="title" name="title" value={formData.title} onChange={onInputChange} required />
@@ -485,7 +483,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 />
               </FormGroup>
 
-              {/* Date & Time */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <FormGroup label="Event Date *" htmlFor="eventDate">
                   <Input
@@ -520,7 +518,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </FormGroup>
               </div>
 
-              {/* Venue & Logistics */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Venue *" htmlFor="venue">
                   <Input id="venue" name="venue" value={formData.venue} onChange={onInputChange} required />
@@ -538,7 +536,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </FormGroup>
               </div>
 
-              {/* Priority & Budget */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Priority" htmlFor="priority">
                   <Select
@@ -568,7 +566,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </FormGroup>
               </div>
 
-              {/* Tags */}
+              {}
               <FormGroup label="Tags" htmlFor="tags" hint="Separate tags with commas (e.g., team-building, quarterly, remote)">
                 <Input
                   id="tags"
@@ -590,7 +588,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 />
               </FormGroup>
 
-              {/* Contact Person */}
+              {}
               <div>
                 <h3 className="mb-4 text-lg font-semibold">Contact Person</h3>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -623,7 +621,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </div>
               </div>
 
-              {/* Actions */}
+              {}
               <div className="flex justify-end gap-3 border-t border-neutral-800 pt-6">
                 <Button
                   type="button"
@@ -711,7 +709,6 @@ function EmptyState({ onCreateEvent }) {
   )
 }
 
-/* ---------- Form Components ---------- */
 function FormGroup({ label, htmlFor, children, hint }) {
   return (
     <div className="flex flex-col gap-2">

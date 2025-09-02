@@ -43,7 +43,6 @@ export default function UserDashboard() {
     fetchEvents()
     fetchNotifications()
 
-    // Listen for the custom events from header
     const handleOpenEventForm = () => {
       setShowEventForm(true)
     }
@@ -59,7 +58,7 @@ export default function UserDashboard() {
       window.removeEventListener('openEventForm', handleOpenEventForm)
       window.removeEventListener('openNotifications', handleOpenNotifications)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [])
 
   const fetchEvents = async () => {
@@ -86,7 +85,7 @@ export default function UserDashboard() {
   }
 
   const fetchTemplates = async () => {
-    // Removed template functionality
+
   }
 
   const handleUseTemplate = (template) => {
@@ -105,7 +104,7 @@ export default function UserDashboard() {
       requirements: template.requirements || "",
       contactPerson: template.contactPerson || { name: "", email: "", phone: "" },
     })
-    // setShowTemplates(false) - Templates functionality removed
+
     setShowEventForm(true)
   }
 
@@ -133,7 +132,7 @@ export default function UserDashboard() {
   const handleEventAction = async (eventId, action) => {
     try {
       if (action === 'reminder') {
-        // Set reminder for event
+
         alert("Reminder set for this event!")
       } else if (action === 'cancel') {
         if (window.confirm("Are you sure you want to cancel this event?")) {
@@ -154,7 +153,7 @@ export default function UserDashboard() {
 
   const handleSubmitRating = async (rating, comment) => {
     try {
-      // Check if user has already submitted feedback
+
       const userFeedback = selectedEventForRating.feedback?.find(f => f.user === user._id || f.user._id === user._id)
       if (userFeedback) {
         alert("You have already submitted feedback for this event!")
@@ -190,8 +189,7 @@ export default function UserDashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    // Validate required fields
+
     const requiredFields = [
       { field: 'title', name: 'Event Title' },
       { field: 'description', name: 'Description' },
@@ -210,8 +208,7 @@ export default function UserDashboard() {
       alert(`Please fill in all required fields: ${fieldNames}`)
       return
     }
-    
-    // Validate capacity is a positive number
+
     if (isNaN(formData.capacity) || parseInt(formData.capacity) <= 0) {
       alert("Please enter a valid capacity (positive number)")
       return
@@ -223,8 +220,7 @@ export default function UserDashboard() {
         capacity: parseInt(formData.capacity), // Ensure capacity is not automatically decreased
         estimatedCost: formData.estimatedCost ? parseFloat(formData.estimatedCost) : undefined,
       }
-      
-      // Remove tags field completely as per requirement 1.3
+
       delete submitData.tags
       
       await eventsAPI.createEvent(submitData)
@@ -287,7 +283,7 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {/* Modern Hero Section */}
+      {}
       <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-emerald-950/20">
         <div className="absolute inset-0 opacity-30"
              style={{
@@ -311,7 +307,7 @@ export default function UserDashboard() {
                 Create, track, and manage all your events in one powerful platform.
               </p>
               
-              {/* Stats Cards */}
+              {}
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <StatCard label="Total Events" value={stats.total} icon={<Layers3 className="h-5 w-5" />} />
                 <StatCard label="Pending" value={stats.pending} icon={<Clock className="h-5 w-5" />} color="amber" />
@@ -323,9 +319,9 @@ export default function UserDashboard() {
         </div>
       </section>
 
-      {/* Main Content */}
+      {}
       <div className="mx-auto w-full max-w-7xl px-4 pb-14">
-        {/* Enhanced Event Form Modal */}
+        {}
         {showEventForm && <EventFormModal 
           formData={formData}
           onInputChange={handleInputChange}
@@ -333,14 +329,14 @@ export default function UserDashboard() {
           onClose={() => { setShowEventForm(false); resetForm(); }}
         />}
 
-        {/* Notifications Modal */}
+        {}
         {showNotifications && <NotificationModal 
           notifications={notifications}
           onMarkAsRead={handleMarkAsRead}
           onClose={() => setShowNotifications(false)}
         />}
 
-        {/* Rating Modal */}
+        {}
         {showRatingModal && selectedEventForRating && (
           <RatingModal 
             event={selectedEventForRating}
@@ -352,7 +348,7 @@ export default function UserDashboard() {
           />
         )}
 
-        {/* Filters and Search */}
+        {}
         <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -390,7 +386,7 @@ export default function UserDashboard() {
           </Button>
         </div>
 
-        {/* Events Grid */}
+        {}
         <div className="mt-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold sm:text-3xl">Your Events</h2>
@@ -422,8 +418,6 @@ export default function UserDashboard() {
   )
 }
 
-/* ---------- Modern UI Components ---------- */
-
 function StatCard({ label, value, icon, color = "neutral" }) {
   const colorMap = {
     neutral: "border-neutral-700 bg-neutral-800",
@@ -449,7 +443,7 @@ function EventCard({ event, onAction, user }) {
   return (
     <Card className="group border-neutral-800 bg-neutral-900 transition-all hover:border-neutral-700 hover:shadow-lg h-full">
       <CardContent className="p-6 flex flex-col h-full">
-        {/* Header */}
+        {}
         <div className="mb-4 flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <h3 className="text-xl font-semibold text-neutral-100 line-clamp-2 leading-tight">{event.title}</h3>
@@ -493,12 +487,12 @@ function EventCard({ event, onAction, user }) {
           </div>
         </div>
 
-        {/* Description */}
+        {}
         <div className="mb-4 flex-grow">
           <p className="text-neutral-300 line-clamp-3 leading-relaxed">{event.description}</p>
         </div>
 
-        {/* Details Grid */}
+        {}
         <div className="mb-4 space-y-3 text-sm">
           <DetailRow icon={<Calendar className="h-4 w-4" />} label="Date" value={formatDate(event.eventDate)} />
           <DetailRow icon={<Clock className="h-4 w-4" />} label="Time" value={event.eventTime || "-"} />
@@ -512,7 +506,7 @@ function EventCard({ event, onAction, user }) {
           )}
         </div>
 
-        {/* Feedback Status */}
+        {}
         {event.status === 'completed' && event.feedback?.some(f => f.user === user._id || f.user._id === user._id) && (
           <div className="mb-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
             <div className="flex items-center gap-2 text-emerald-400 text-sm">
@@ -522,8 +516,8 @@ function EventCard({ event, onAction, user }) {
           </div>
         )}
 
-        {/* Tags */}
-        {/* Review Notes */}
+        {}
+        {}
         {event.reviewNotes && (
           <div className="mb-4 rounded-md border-l-4 border-emerald-500/50 bg-emerald-500/10 p-3">
             <div className="text-sm">
@@ -533,7 +527,7 @@ function EventCard({ event, onAction, user }) {
           </div>
         )}
 
-        {/* Footer */}
+        {}
         <div className="mt-auto pt-4 flex items-center justify-between border-t border-neutral-800 text-xs text-neutral-400">
           <span>Submitted {formatDate(event.createdAt)}</span>
           <span className="capitalize px-2 py-1 bg-neutral-800 rounded text-neutral-300">{event.category}</span>
@@ -561,7 +555,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
           
           <CardContent className="p-6">
             <form onSubmit={onSubmit} className="space-y-6">
-              {/* Basic Info */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Event Title *" htmlFor="title">
                   <Input id="title" name="title" value={formData.title} onChange={onInputChange} required />
@@ -599,7 +593,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 />
               </FormGroup>
 
-              {/* Date & Time */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <FormGroup label="Event Date *" htmlFor="eventDate">
                   <Input
@@ -634,7 +628,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </FormGroup>
               </div>
 
-              {/* Venue & Logistics */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Venue *" htmlFor="venue">
                   <Input id="venue" name="venue" value={formData.venue} onChange={onInputChange} required />
@@ -652,7 +646,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </FormGroup>
               </div>
 
-              {/* Priority & Budget */}
+              {}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormGroup label="Priority" htmlFor="priority">
                   <Select
@@ -693,7 +687,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 />
               </FormGroup>
 
-              {/* Contact Person */}
+              {}
               <div>
                 <h3 className="mb-4 text-lg font-semibold">Contact Person</h3>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -726,7 +720,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
                 </div>
               </div>
 
-              {/* Actions */}
+              {}
               <div className="flex justify-end gap-3 border-t border-neutral-800 pt-6">
                 <Button
                   type="button"
@@ -960,7 +954,6 @@ function EmptyState({ onCreateEvent }) {
   )
 }
 
-/* ---------- Form Components ---------- */
 function FormGroup({ label, htmlFor, children, hint }) {
   return (
     <div className="flex flex-col gap-2">

@@ -34,7 +34,7 @@ const Header = () => {
       navigate('/admin');
     } else {
       navigate('/dashboard');
-      // Trigger event form modal opening
+
       window.dispatchEvent(new CustomEvent('openEventForm'));
     }
   };
@@ -44,7 +44,7 @@ const Header = () => {
       navigate('/admin');
     } else {
       navigate('/dashboard');
-      // Trigger notifications modal opening
+
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent('openNotifications'));
       }, 200);
@@ -139,7 +139,7 @@ const Header = () => {
                 <Link to="/register">Sign Up</Link>
               </Button>
               
-              {/* Mobile menu button */}
+              {}
               <Button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
                 variant="ghost"
@@ -197,7 +197,7 @@ const Header = () => {
         </div>
       </div>
       
-      {/* Mobile menu */}
+      {}
       {showMobileMenu && !isAuthenticated && (
         <div className="md:hidden border-t border-neutral-800 bg-neutral-950/95 backdrop-blur">
           <div className="px-4 py-4 space-y-4">

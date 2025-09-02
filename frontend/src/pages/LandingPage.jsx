@@ -86,9 +86,9 @@ const LandingPage = () => {
   return (
     <div className="dark min-h-[100dvh] bg-neutral-950 text-neutral-100">
       <main>
-        {/* Hero with premium background */}
+        {}
         <section className="relative overflow-hidden">
-          {/* Premium gradient mesh + grain */}
+          {}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-neutral-950/70 to-neutral-950" />
             <div className="absolute -left-40 -top-32 h-[48rem] w-[48rem] rounded-full bg-emerald-500/15 blur-3xl animate-pulse" />
@@ -154,7 +154,7 @@ const LandingPage = () => {
               </p>
             </div>
 
-            {/* Quick highlights card */}
+            {}
             <Card className="border-neutral-800 bg-neutral-900/60 backdrop-blur shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               <CardContent className="p-6 sm:p-8">
                 <div className="grid gap-6">
@@ -188,7 +188,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
+        {}
         <section className="bg-neutral-950 border-b border-neutral-800">
           <div className="mx-auto max-w-7xl px-4 py-16">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
@@ -202,7 +202,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Features */}
+        {}
         <section id="features" className={`border-t border-neutral-800 bg-neutral-950 transition-all duration-1000 ${isVisible.features ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
             <div className="mx-auto max-w-3xl text-center mb-16">
@@ -259,7 +259,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Why Choose Us */}
+        {}
         <section id="why" className={`bg-neutral-950 transition-all duration-1000 ${isVisible.why ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:py-20 lg:grid-cols-2">
             <div className="space-y-6">
@@ -349,7 +349,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Testimonials / Trust */}
+        {}
         <section id="testimonials" className={`border-t border-neutral-800 bg-neutral-950 transition-all duration-1000 ${isVisible.testimonials ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
             <div className="mx-auto max-w-3xl text-center mb-16">
@@ -419,7 +419,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Secondary CTA */}
+        {}
         <section id="cta" className="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 relative">
           <div className="absolute inset-0 bg-emerald-500/5" />
           <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 py-20 sm:py-24 lg:grid-cols-[1fr_auto]">

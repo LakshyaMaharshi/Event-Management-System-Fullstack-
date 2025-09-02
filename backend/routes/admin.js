@@ -6,13 +6,9 @@ const { sendNotification, notificationTemplates } = require('../utils/notificati
 
 const router = express.Router();
 
-// Apply admin middleware to all routes
 router.use(protect);
 router.use(adminOnly);
 
-// @desc    Get all pending event requests
-// @route   GET /api/admin/pending-events
-// @access  Admin only
 router.get('/pending-events', async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -42,9 +38,6 @@ router.get('/pending-events', async (req, res) => {
   }
 });
 
-// @desc    Get all events with filtering
-// @route   GET /api/admin/events
-// @access  Admin only
 router.get('/events', async (req, res) => {
   try {
     const { status, page = 1, limit = 10, sortBy = 'createdAt', sortOrder = 'desc' } = req.query;
@@ -83,9 +76,6 @@ router.get('/events', async (req, res) => {
   }
 });
 
-// @desc    Approve event request
-// @route   PUT /api/admin/events/:id/approve
-// @access  Admin only
 router.put('/events/:id/approve', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id).populate('submittedBy', 'name email');
@@ -104,7 +94,6 @@ router.put('/events/:id/approve', async (req, res) => {
       });
     }
 
-    // Update event status
     event.status = 'approved';
     event.reviewedBy = req.user.id;
     event.reviewedAt = new Date();
@@ -112,7 +101,6 @@ router.put('/events/:id/approve', async (req, res) => {
 
     await event.save();
 
-    // Send approval notification instead of email
     const notificationTemplate = notificationTemplates.eventApproved(
       event.submittedBy.name,
       event.title,
@@ -135,9 +123,6 @@ router.put('/events/:id/approve', async (req, res) => {
   }
 });
 
-// @desc    Deny event request
-// @route   PUT /api/admin/events/:id/deny
-// @access  Admin only
 router.put('/events/:id/deny', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id).populate('submittedBy', 'name email');
@@ -156,7 +141,6 @@ router.put('/events/:id/deny', async (req, res) => {
       });
     }
 
-    // Update event status
     event.status = 'denied';
     event.reviewedBy = req.user.id;
     event.reviewedAt = new Date();
@@ -164,7 +148,6 @@ router.put('/events/:id/deny', async (req, res) => {
 
     await event.save();
 
-    // Send denial notification instead of email
     const notificationTemplate = notificationTemplates.eventDenied(
       event.submittedBy.name,
       event.title,
@@ -187,9 +170,6 @@ router.put('/events/:id/deny', async (req, res) => {
   }
 });
 
-// @desc    Mark event as completed
-// @route   PUT /api/admin/events/:id/complete
-// @access  Admin only
 router.put('/events/:id/complete', async (req, res) => {
   try {
     const event = await Event.findById(req.params.id).populate('submittedBy', 'name email');
@@ -211,7 +191,6 @@ router.put('/events/:id/complete', async (req, res) => {
     event.status = 'completed';
     await event.save();
 
-    // Send completion notification instead of email
     const notificationTemplate = notificationTemplates.eventCompleted(
       event.submittedBy.name,
       event.title
@@ -233,14 +212,10 @@ router.put('/events/:id/complete', async (req, res) => {
   }
 });
 
-// @desc    Get analytics data
-// @route   GET /api/admin/analytics
-// @access  Admin only
 router.get('/analytics', async (req, res) => {
   try {
     const { year = new Date().getFullYear(), month } = req.query;
 
-    // Base date filters
     const startDate = month 
       ? new Date(year, month - 1, 1)
       : new Date(year, 0, 1);
@@ -249,7 +224,6 @@ router.get('/analytics', async (req, res) => {
       ? new Date(year, month, 0)
       : new Date(year, 11, 31);
 
-    // Get event statistics
     const totalEvents = await Event.countDocuments({
       createdAt: { $gte: startDate, $lte: endDate }
     });
@@ -268,7 +242,6 @@ router.get('/analytics', async (req, res) => {
       }
     ]);
 
-    // Get events by category
     const eventsByCategory = await Event.aggregate([
       {
         $match: {
@@ -283,7 +256,6 @@ router.get('/analytics', async (req, res) => {
       }
     ]);
 
-    // Get average rating
     const avgRating = await Event.aggregate([
       {
         $match: {
@@ -303,7 +275,6 @@ router.get('/analytics', async (req, res) => {
       }
     ]);
 
-    // Get monthly trends (last 12 months)
     const monthlyTrends = await Event.aggregate([
       {
         $match: {
@@ -324,7 +295,6 @@ router.get('/analytics', async (req, res) => {
       }
     ]);
 
-    // Peak scheduling times
     const peakTimes = await Event.aggregate([
       {
         $match: {
@@ -370,9 +340,6 @@ router.get('/analytics', async (req, res) => {
   }
 });
 
-// @desc    Get all users
-// @route   GET /api/admin/users
-// @access  Admin only
 router.get('/users', async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;

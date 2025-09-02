@@ -23,7 +23,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [activeTab])
 
   const fetchData = async () => {
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {/* Modern Admin Hero */}
+      {}
       <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-950 to-purple-950/20">
         <div className="absolute inset-0 opacity-30"
              style={{
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
                 Welcome, {user?.name || "Admin"}! Monitor, approve, and manage all event requests with powerful insights and streamlined workflows.
               </p>
               
-              {/* Admin Stats */}
+              {}
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <MetricCard 
                   title="Total Events" 
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             
-            {/* Tab Navigation */}
+            {}
             <div className="mt-8 lg:mt-0">
               <div className="inline-flex rounded-lg border border-neutral-800 bg-neutral-900 p-1">
                 <TabButton active={activeTab === "pending"} onClick={() => setActiveTab("pending")}>
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
       </section>
       
       <div className="mx-auto w-full max-w-7xl px-4 pb-14">
-        {/* Event Detail Modal */}
+        {}
         {selectedEvent && (
           <EventDetailModal
             event={selectedEvent}
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
           />
         )}
 
-        {/* Pending Events */}
+        {}
         {activeTab === "pending" && (
           <section className="mt-8">
             <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Pending Event Requests</h2>
@@ -238,7 +238,7 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* All Events */}
+        {}
         {activeTab === "all" && (
           <section className="mt-8">
             <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">All Events</h2>
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* Denied Events */}
+        {}
         {activeTab === "denied" && (
           <section className="mt-8">
             <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Denied Events</h2>
@@ -294,13 +294,13 @@ export default function AdminDashboard() {
           </section>
         )}
 
-        {/* Analytics */}
+        {}
         {activeTab === "analytics" && (
           <section className="mt-8">
             <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Analytics Dashboard</h2>
             {analytics ? (
               <div className="space-y-8">
-                {/* Key Metrics */}
+                {}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                   <MetricCard 
                     title="Total Events" 
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
                   />
                 </div>
 
-                {/* Charts */}
+                {}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   <Card className="border-neutral-800 bg-neutral-900">
                     <CardContent className="p-6">
@@ -377,9 +377,6 @@ export default function AdminDashboard() {
   )
 }
 
-/* ---------- Component Definitions ---------- */
-
-// Empty State Component
 function EmptyState({ icon, title, subtitle }) {
   return (
     <Card className="border-neutral-800 bg-neutral-900">
@@ -394,7 +391,6 @@ function EmptyState({ icon, title, subtitle }) {
   )
 }
 
-// Admin Event Card Component
 function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPending }) {
   const formatDate = (dateString) => {
     if (!dateString) return 'TBD'
@@ -419,7 +415,7 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
   return (
     <Card className="group border-neutral-800 bg-neutral-900 transition-all hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 h-full">
       <CardContent className="p-6 flex flex-col h-full">
-        {/* Header */}
+        {}
         <div className="mb-4 flex items-start justify-between">
           <div className="min-w-0 flex-1 mr-3">
             <h3 className="line-clamp-2 text-lg font-semibold text-neutral-100 group-hover:text-emerald-400 transition-colors leading-tight">
@@ -432,7 +428,7 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
           </div>
         </div>
 
-        {/* Event Details */}
+        {}
         <div className="space-y-3 flex-grow">
           <div className="flex items-center gap-2 text-sm text-neutral-300">
             <Calendar className="h-4 w-4 text-neutral-400 flex-shrink-0" />
@@ -467,7 +463,7 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
             </div>
           )}
 
-          {/* Description Preview */}
+          {}
           {event.description && (
             <div className="mt-4">
               <p className="line-clamp-2 text-sm text-neutral-400 leading-relaxed">
@@ -476,7 +472,7 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
             </div>
           )}
 
-          {/* Feedback Summary */}
+          {}
           {event.feedback && event.feedback.length > 0 && (
             <div className="mt-3 flex items-center gap-2 text-sm">
               <div className="flex items-center gap-1">
@@ -501,7 +497,7 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
           )}
         </div>
 
-        {/* Actions */}
+        {}
         <div className="mt-6 pt-4 border-t border-neutral-800">
           <div className="flex gap-2">
             <Button
@@ -551,7 +547,6 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
   )
 }
 
-// Event Detail Modal Component
 function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
   const formatDate = (dateString) => {
     if (!dateString) return 'TBD'
@@ -577,7 +572,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-4xl max-h-[90vh] overflow-y-scroll rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-        {/* Header */}
+        {}
         <div className="flex items-center justify-between border-b border-neutral-800 p-6">
           <h2 className="text-2xl font-bold text-neutral-100">Event Details</h2>
           <Button
@@ -590,10 +585,10 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
           </Button>
         </div>
 
-        {/* Content */}
+        {}
         <div className="overflow-y-auto max-h-[calc(90vh-140px)]">
           <div className="p-6 space-y-6">
-            {/* Title and Status */}
+            {}
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-3xl font-bold text-neutral-100 mb-2">{event.title}</h3>
@@ -602,7 +597,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               <StatusBadge status={event.status} />
             </div>
 
-            {/* Key Information Grid */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
@@ -659,13 +654,13 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               </div>
             </div>
 
-            {/* Description */}
+            {}
             <div>
               <h4 className="text-sm font-medium text-neutral-400 mb-2">Description</h4>
               <p className="text-neutral-100 leading-relaxed">{event.description}</p>
             </div>
 
-            {/* Contact Information */}
+            {}
             {event.contactPerson && (
               <div>
                 <h4 className="text-sm font-medium text-neutral-400 mb-2">Contact Person</h4>
@@ -696,7 +691,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               </div>
             )}
 
-            {/* Submitter Information */}
+            {}
             <div>
               <h4 className="text-sm font-medium text-neutral-400 mb-2">Submitted By</h4>
               <div className="bg-neutral-800 rounded-lg p-4 space-y-2">
@@ -721,7 +716,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               </div>
             </div>
 
-            {/* Event Feedback */}
+            {}
             {event.feedback && event.feedback.length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-neutral-400 mb-2">Event Feedback ({event.feedback.length})</h4>
@@ -761,7 +756,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
                     </div>
                   ))}
                   
-                  {/* Average Rating */}
+                  {}
                   <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
                     <div className="flex items-center gap-2">
                       <span className="text-emerald-400 font-medium">Average Rating:</span>
@@ -788,7 +783,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               </div>
             )}
 
-            {/* Tags */}
+            {}
             {event.tags && event.tags.length > 0 && (
               <div>
                 <h4 className="text-sm font-medium text-neutral-400 mb-2">Tags</h4>
@@ -805,7 +800,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
               </div>
             )}
 
-            {/* Cost Estimation */}
+            {}
             {event.estimatedCost && (
               <div>
                 <h4 className="text-sm font-medium text-neutral-400 mb-2">Estimated Cost</h4>
@@ -817,7 +812,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
           </div>
         </div>
 
-        {/* Actions */}
+        {}
         <div className="border-t border-neutral-800 p-6">
           <div className="flex justify-end gap-3">
             <Button variant="outline" onClick={onClose}>
@@ -858,7 +853,6 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
   )
 }
 
-// Metric Card Component
 function MetricCard({ title, value, icon, trend, suffix = "" }) {
   return (
     <Card className="border-neutral-800 bg-neutral-900">
@@ -879,7 +873,6 @@ function MetricCard({ title, value, icon, trend, suffix = "" }) {
   )
 }
 
-// Analytics Bar Component
 function AnalyticsBar({ label, value, total, color }) {
   const percentage = total > 0 ? (value / total) * 100 : 0
   const colorClasses = {
@@ -904,8 +897,6 @@ function AnalyticsBar({ label, value, total, color }) {
     </div>
   )
 }
-
-/* ---------- UI helpers ---------- */
 
 function TabButton({ active, onClick, children }) {
   return (
@@ -944,7 +935,6 @@ function NoteBlock({ color = "blue", title, text }) {
     </div>
   )
 }
-
 
 function KeyValuePill({ label, value, color = "emerald" }) {
   const colorMap = {

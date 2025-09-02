@@ -7,12 +7,10 @@ dotenv.config();
 
 const seedAdmin = async () => {
   try {
-    // Connect to database
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/event-management');
 
     console.log('Connected to MongoDB');
 
-    // Check if admin already exists
     const existingAdmin = await User.findOne({ email: 'admin@eventmanagement.com' });
     
     if (existingAdmin) {
@@ -20,7 +18,6 @@ const seedAdmin = async () => {
       process.exit(0);
     }
 
-    // Create admin user
     const adminUser = await User.create({
       name: 'Admin User',
       email: 'admin@eventmanagement.com',

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to include token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -24,18 +22,15 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor to handle token expiration
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
     const originalConfig = err.config;
 
     if (originalConfig.url !== '/auth/login' && err.response) {
-      // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
         
-        // Remove token and redirect to login
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
@@ -48,7 +43,6 @@ api.interceptors.response.use(
   }
 );
 
-// Auth API calls
 export const authAPI = {
   register: (userData) => api.post('/auth/register', userData),
   login: (credentials) => api.post('/auth/login', credentials),
@@ -59,7 +53,6 @@ export const authAPI = {
   resetPassword: (token, password) => api.post('/auth/reset-password', { token, password }),
 };
 
-// Events API calls
 export const eventsAPI = {
   createEvent: (eventData) => api.post('/events', eventData),
   getMyEvents: (params) => api.get('/events/my-events', { params }),
@@ -69,7 +62,6 @@ export const eventsAPI = {
   submitFeedback: (id, feedback) => api.post(`/events/${id}/feedback`, feedback),
 };
 
-// Admin API calls
 export const adminAPI = {
   getPendingEvents: (params) => api.get('/admin/pending-events', { params }),
   getAllEvents: (params) => api.get('/admin/events', { params }),
@@ -80,14 +72,12 @@ export const adminAPI = {
   getUsers: (params) => api.get('/admin/users', { params }),
 };
 
-// Users API calls
 export const usersAPI = {
   getProfile: () => api.get('/users/profile'),
   updatePreferences: (preferences) => api.put('/users/preferences', { preferences }),
   getUserStats: () => api.get('/users/stats'),
 };
 
-// Notifications API calls
 export const notificationsAPI = {
   getNotifications: (params) => api.get('/notifications', { params }),
   markAsRead: (id) => api.put(`/notifications/${id}/read`),

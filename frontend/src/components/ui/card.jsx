@@ -1,6 +1,5 @@
 import * as React from "react";
 
-// Utility function to combine class names (replaces cn from @/lib/utils)
 const cn = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };

@@ -24,7 +24,7 @@ const notificationSchema = new mongoose.Schema({
     ref: 'Event',
   },
   adminNote: {
-    type: String, // For denial reasons or admin notes
+    type: String,
   },
   isRead: {
     type: Boolean,
@@ -39,7 +39,6 @@ const notificationSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Index for better performance
 notificationSchema.index({ recipient: 1, isRead: 1 });
 notificationSchema.index({ createdAt: -1 });
 

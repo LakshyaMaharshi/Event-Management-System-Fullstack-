@@ -28,7 +28,6 @@ const LoginPage = () => {
     const result = await login(formData);
     
     if (result.success) {
-      // Navigation will be handled by the ProtectedRoute logic in App.js
       navigate('/dashboard');
     } else {
       setError(result.message);
@@ -111,7 +110,6 @@ const LoginPage = () => {
             </p>
           </div>
 
-          {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-neutral-800/50 rounded-md border-l-4 border-emerald-500">
             <h4 className="mt-0 mb-2 text-neutral-100 text-sm font-semibold">Demo Credentials:</h4>
             <p className="my-1 text-neutral-300 text-xs"><strong>Admin:</strong> admin@eventmanagement.com / admin123</p>

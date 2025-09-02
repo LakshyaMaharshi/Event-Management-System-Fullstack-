@@ -22,14 +22,12 @@ export default function ContactUs() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Create mailto link
     const subject = encodeURIComponent(formData.subject || 'Contact Form Submission')
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     )
     const mailtoLink = `mailto:mileekakadiya@gmail.com?subject=${subject}&body=${body}`
-    
-    // Open email client
+
     window.location.href = mailtoLink
     
     setTimeout(() => {
@@ -60,7 +58,7 @@ export default function ContactUs() {
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
+          {}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-neutral-400 text-lg">
@@ -69,7 +67,7 @@ export default function ContactUs() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Information */}
+            {}
             <div className="space-y-8">
               <div>
                 <h2 className="text-2xl font-semibold mb-6">Get in Touch</h2>
@@ -112,7 +110,7 @@ export default function ContactUs() {
               </div>
             </div>
 
-            {/* Contact Form */}
+            {}
             <div className="bg-neutral-900 rounded-xl p-8 border border-neutral-800">
               <h2 className="text-2xl font-semibold mb-6">Send us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">

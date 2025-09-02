@@ -7,9 +7,6 @@ const { sendNotification, notificationTemplates } = require('../utils/notificati
 
 const router = express.Router();
 
-// @desc    Submit new event request
-// @route   POST /api/events
-// @access  Private
 router.post('/', protect, [
   body('title').trim().isLength({ min: 3 }).withMessage('Title must be at least 3 characters'),
   body('description').trim().isLength({ min: 10 }).withMessage('Description must be at least 10 characters'),
@@ -39,7 +36,6 @@ router.post('/', protect, [
 
     const event = await Event.create(eventData);
 
-    // Send notification instead of email
     const notificationTemplate = notificationTemplates.eventSubmitted(req.user.name, event.title);
     await sendNotification(req.user.id, notificationTemplate, event._id);
 
@@ -57,9 +53,6 @@ router.post('/', protect, [
   }
 });
 
-// @desc    Get user's events
-// @route   GET /api/events/my-events
-// @access  Private
 router.get('/my-events', protect, async (req, res) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
@@ -95,9 +88,6 @@ router.get('/my-events', protect, async (req, res) => {
   }
 });
 
-// @desc    Get single event
-// @route   GET /api/events/:id
-// @access  Private
 router.get('/:id', protect, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id)
@@ -112,7 +102,6 @@ router.get('/:id', protect, async (req, res) => {
       });
     }
 
-    // Check if user owns the event or is admin
     if (event.submittedBy._id.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
@@ -133,9 +122,6 @@ router.get('/:id', protect, async (req, res) => {
   }
 });
 
-// @desc    Update event (only if pending)
-// @route   PUT /api/events/:id
-// @access  Private
 router.put('/:id', protect, [
   body('title').optional().trim().isLength({ min: 3 }).withMessage('Title must be at least 3 characters'),
   body('description').optional().trim().isLength({ min: 10 }).withMessage('Description must be at least 10 characters'),
@@ -159,7 +145,6 @@ router.put('/:id', protect, [
       });
     }
 
-    // Check if user owns the event
     if (event.submittedBy.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
@@ -167,7 +152,6 @@ router.put('/:id', protect, [
       });
     }
 
-    // Only allow updates if event is pending
     if (event.status !== 'pending') {
       return res.status(400).json({
         success: false,
@@ -194,9 +178,6 @@ router.put('/:id', protect, [
   }
 });
 
-// @desc    Submit feedback for an event
-// @route   POST /api/events/:id/feedback
-// @access  Private
 router.post('/:id/feedback', protect, [
   body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
   body('comment').optional().trim().isLength({ max: 500 }).withMessage('Comment must not exceed 500 characters'),
@@ -220,7 +201,6 @@ router.post('/:id/feedback', protect, [
       });
     }
 
-    // Check if event is completed
     if (event.status !== 'completed') {
       return res.status(400).json({
         success: false,
@@ -228,7 +208,6 @@ router.post('/:id/feedback', protect, [
       });
     }
 
-    // Check if user already provided feedback
     const existingFeedback = event.feedback.find(
       feedback => feedback.user.toString() === req.user.id
     );
@@ -240,7 +219,6 @@ router.post('/:id/feedback', protect, [
       });
     }
 
-    // Add feedback
     event.feedback.push({
       user: req.user.id,
       rating: req.body.rating,
@@ -262,9 +240,6 @@ router.post('/:id/feedback', protect, [
   }
 });
 
-// @desc    Delete event
-// @route   DELETE /api/events/:id
-// @access  Private
 router.delete('/:id', protect, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -276,7 +251,6 @@ router.delete('/:id', protect, async (req, res) => {
       });
     }
 
-    // Check if user owns the event or is admin
     if (event.submittedBy.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
@@ -284,7 +258,6 @@ router.delete('/:id', protect, async (req, res) => {
       });
     }
 
-    // Only allow deletion of pending or denied events
     if (event.status === 'approved' || event.status === 'completed') {
       return res.status(400).json({
         success: false,

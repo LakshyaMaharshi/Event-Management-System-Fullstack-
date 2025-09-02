@@ -12,7 +12,6 @@ import ContactUs from './pages/ContactUs';
 import Layout from './components/layout/Layout';
 import './App.css';
 
-// Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
@@ -31,7 +30,6 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
-// Public Route Component
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
@@ -40,7 +38,6 @@ const PublicRoute = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    // Redirect based on user role
     const redirectTo = user?.role === 'admin' ? '/admin' : '/dashboard';
     return <Navigate to={redirectTo} replace />;
   }
@@ -53,7 +50,6 @@ const AppRoutes = () => {
     <Router>
       <Layout>
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route
             path="/login"
@@ -74,7 +70,6 @@ const AppRoutes = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/contact-us" element={<ContactUs />} />
 
-          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
@@ -100,7 +95,6 @@ const AppRoutes = () => {
             }
           />
 
-          {/* Catch all route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

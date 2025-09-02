@@ -1,6 +1,5 @@
 const Notification = require('../models/Notification');
 
-// Create notification function
 const createNotification = async (data) => {
   try {
     const notification = await Notification.create(data);
@@ -11,7 +10,6 @@ const createNotification = async (data) => {
   }
 };
 
-// Notification templates
 const notificationTemplates = {
   eventSubmitted: (userName, eventTitle) => ({
     type: 'event_submitted',
@@ -50,7 +48,6 @@ const notificationTemplates = {
   })
 };
 
-// Send notification to user
 const sendNotification = async (recipientId, template, eventId = null) => {
   try {
     const notificationData = {
@@ -66,7 +63,6 @@ const sendNotification = async (recipientId, template, eventId = null) => {
   }
 };
 
-// Send notification to multiple users
 const sendBulkNotifications = async (recipientIds, template, eventId = null) => {
   try {
     const notifications = recipientIds.map(recipientId => ({
