@@ -751,7 +751,7 @@ function EventFormModal({ formData, onInputChange, onSubmit, onClose }) {
 function NotificationModal({ notifications, onMarkAsRead, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <Card className="w-full max-w-2xl max-h-[80vh] overflow-hidden border-neutral-800 bg-neutral-900">
+      <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto border-neutral-800 bg-neutral-900">
         <div className="flex items-center justify-between border-b border-neutral-800 p-6">
           <h2 className="text-2xl font-semibold flex items-center gap-2">
             <Bell className="h-6 w-6" />

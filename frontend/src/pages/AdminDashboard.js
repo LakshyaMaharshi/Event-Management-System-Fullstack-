@@ -306,7 +306,6 @@ export default function AdminDashboard() {
                     title="Total Events" 
                     value={analytics.totalEvents}
                     icon={<TrendingUp className="h-6 w-6" />}
-                    trend="+12% vs last month"
                   />
                   <MetricCard
                     title="Average Rating"
@@ -318,7 +317,6 @@ export default function AdminDashboard() {
                     title="Total Feedback"
                     value={analytics.totalFeedback}
                     icon={<Users className="h-6 w-6" />}
-                    trend="+8% engagement"
                   />
                 </div>
 
@@ -578,7 +576,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-scroll rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-800 p-6">
           <h2 className="text-2xl font-bold text-neutral-100">Event Details</h2>
@@ -871,9 +869,6 @@ function MetricCard({ title, value, icon, trend, suffix = "" }) {
             <p className="text-3xl font-bold text-neutral-100">
               {value}{suffix}
             </p>
-            {trend && (
-              <p className="text-sm text-emerald-400 mt-1">{trend}</p>
-            )}
           </div>
           <div className="rounded-lg bg-emerald-500/10 p-3 text-emerald-500">
             {icon}

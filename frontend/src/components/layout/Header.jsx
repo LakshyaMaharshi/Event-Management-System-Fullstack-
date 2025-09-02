@@ -65,6 +65,7 @@ const Header = () => {
         {isAuthenticated ? (
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
             {user?.role !== 'admin' && (
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
               <Button
                 onClick={handleCreateEvent}
                 variant="ghost"
@@ -73,14 +74,15 @@ const Header = () => {
                 <Plus className="mr-2 h-4 w-4" />
                 Create Event
               </Button>
-            )}
-            <button
+              <button
               onClick={handleNotifications}
               className="flex items-center gap-2 hover:text-emerald-400 bg-transparent border-0 text-neutral-300 cursor-pointer"
             >
               <Bell className="h-4 w-4" />
               Notifications
             </button>
+              </div>
+            )}
           </nav>
         ) : (
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
