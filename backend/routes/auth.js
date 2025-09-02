@@ -1,10 +1,8 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 const User = require('../models/User');
 const sendTokenResponse = require('../utils/sendTokenResponse');
-const sendEmail = require('../utils/sendEmail');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
@@ -216,6 +214,8 @@ router.put('/changepassword', protect, [
     });
   }
 });
+
+module.exports = router;
 
 // @desc    Forgot password
 // @route   POST /api/auth/forgot-password

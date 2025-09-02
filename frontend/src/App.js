@@ -4,8 +4,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProfilePage from './pages/ProfilePage';
@@ -73,15 +71,6 @@ const AppRoutes = () => {
               </PublicRoute>
             }
           />
-          <Route
-            path="/forgot-password"
-            element={
-              <PublicRoute>
-                <ForgotPassword />
-              </PublicRoute>
-            }
-          />
-          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/contact-us" element={<ContactUs />} />
 

@@ -733,7 +733,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-neutral-100">
-                            {feedback.user?.name || 'Anonymous'}
+                            {feedback.user?.name || feedback.userName || 'User'}
                           </span>
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
@@ -752,7 +752,7 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
                           </span>
                         </div>
                         <span className="text-xs text-neutral-500">
-                          {new Date(feedback.createdAt).toLocaleDateString()}
+                          {feedback.createdAt ? formatDate(feedback.createdAt) : 'Recently'}
                         </span>
                       </div>
                       {feedback.comment && (
