@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/button';
-import { ChevronDown, User, LogOut, Plus, Bell } from 'lucide-react';
+import { ChevronDown, User, LogOut, Plus, Bell, Menu, X } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -69,18 +84,42 @@ const Header = () => {
           </nav>
         ) : (
           <nav aria-label="Primary" className="hidden md:flex items-center gap-6 text-sm text-neutral-300">
-            <Link to="/#features" className="hover:text-emerald-400">
+            <button
+              onClick={() => {
+                const element = document.getElementById('features');
+                element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="hover:text-emerald-400 bg-transparent border-0 cursor-pointer transition-colors"
+            >
               Features
-            </Link>
-            <Link to="/#why" className="hover:text-emerald-400">
+            </button>
+            <button
+              onClick={() => {
+                const element = document.getElementById('why');
+                element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="hover:text-emerald-400 bg-transparent border-0 cursor-pointer transition-colors"
+            >
               Why EventFlow
-            </Link>
-            <Link to="/#testimonials" className="hover:text-emerald-400">
+            </button>
+            <button
+              onClick={() => {
+                const element = document.getElementById('testimonials');
+                element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="hover:text-emerald-400 bg-transparent border-0 cursor-pointer transition-colors"
+            >
               Testimonials
-            </Link>
-            <Link to="/#contact" className="hover:text-emerald-400">
+            </button>
+            <button
+              onClick={() => {
+                const element = document.getElementById('contact');
+                element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="hover:text-emerald-400 bg-transparent border-0 cursor-pointer transition-colors"
+            >
               Contact
-            </Link>
+            </button>
           </nav>
         )}
 
@@ -90,19 +129,28 @@ const Header = () => {
               <Button
                 asChild
                 variant="outline"
-                className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
+                className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent hidden sm:flex"
               >
                 <Link to="/login">Login</Link>
               </Button>
               <Button
                 asChild
-                className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900"
+                className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900 hidden sm:flex"
               >
                 <Link to="/register">Sign Up</Link>
               </Button>
+              
+              {/* Mobile menu button */}
+              <Button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                variant="ghost"
+                className="md:hidden text-neutral-300 hover:text-emerald-400 hover:bg-emerald-500/10"
+              >
+                {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
             </>
           ) : (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <Button
                 onClick={() => setShowDropdown(!showDropdown)}
                 variant="ghost"
@@ -116,7 +164,7 @@ const Header = () => {
               </Button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md border border-neutral-700 bg-neutral-800 py-2 shadow-lg">
+                <div className="absolute right-0 mt-2 w-48 rounded-md border border-neutral-700 bg-neutral-800 py-2 shadow-lg z-50">
                   <Link
                     to="/profile"
                     className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-700 hover:text-emerald-400"
@@ -149,6 +197,71 @@ const Header = () => {
           )}
         </div>
       </div>
+      
+      {/* Mobile menu */}
+      {showMobileMenu && !isAuthenticated && (
+        <div className="md:hidden border-t border-neutral-800 bg-neutral-950/95 backdrop-blur">
+          <div className="px-4 py-4 space-y-4">
+            <nav className="space-y-3">
+              <button
+                onClick={() => {
+                  const element = document.getElementById('features');
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setShowMobileMenu(false);
+                }}
+                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 bg-transparent border-0 cursor-pointer transition-colors"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => {
+                  const element = document.getElementById('why');
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setShowMobileMenu(false);
+                }}
+                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 bg-transparent border-0 cursor-pointer transition-colors"
+              >
+                Why EventFlow
+              </button>
+              <button
+                onClick={() => {
+                  const element = document.getElementById('testimonials');
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setShowMobileMenu(false);
+                }}
+                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 bg-transparent border-0 cursor-pointer transition-colors"
+              >
+                Testimonials
+              </button>
+              <button
+                onClick={() => {
+                  const element = document.getElementById('contact');
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setShowMobileMenu(false);
+                }}
+                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 bg-transparent border-0 cursor-pointer transition-colors"
+              >
+                Contact
+              </button>
+            </nav>
+            <div className="space-y-3 pt-4 border-t border-neutral-800">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
+              >
+                <Link to="/login" onClick={() => setShowMobileMenu(false)}>Login</Link>
+              </Button>
+              <Button
+                asChild
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-neutral-900"
+              >
+                <Link to="/register" onClick={() => setShowMobileMenu(false)}>Sign Up</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

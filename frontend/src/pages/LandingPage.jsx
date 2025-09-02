@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/button';
@@ -13,10 +13,75 @@ import {
   Facebook,
   Linkedin,
   CheckCircle2,
+  ArrowRight,
+  Star,
+  Zap,
+  Shield,
+  Globe,
+  Clock,
+  TrendingUp,
+  UserCheck,
+  Target,
+  Sparkles,
 } from 'lucide-react';
 
 const LandingPage = () => {
   const { isAuthenticated, user } = useAuth();
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVisible, setIsVisible] = useState({});
+
+  const testimonials = [
+    {
+      quote: "EventFlow has transformed our operations—our team executes faster and our clients notice the difference.",
+      author: "Alex Nguyen",
+      role: "Director of Events at BrightWorks"
+    },
+    {
+      quote: "The intuitive interface and powerful features have cut our event planning time in half.",
+      author: "Sarah Chen",
+      role: "Event Manager at TechCorp"
+    },
+    {
+      quote: "From small meetings to 5000+ person conferences, EventFlow scales with our needs perfectly.",
+      author: "Michael Rodriguez",
+      role: "VP Events at Global Dynamics"
+    }
+  ];
+
+  const stats = [
+    { number: "10,000+", label: "Events Managed" },
+    { number: "50+", label: "Enterprise Clients" },
+    { number: "99.9%", label: "Uptime" },
+    { number: "24/7", label: "Support" }
+  ];
+
+  useEffect(() => {
+    const testimonialInterval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(testimonialInterval);
+  }, [testimonials.length]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
 
   return (
     <div className="dark min-h-[100dvh] bg-neutral-950 text-neutral-100">
@@ -26,8 +91,9 @@ const LandingPage = () => {
           {/* Premium gradient mesh + grain */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-neutral-950/70 to-neutral-950" />
-            <div className="absolute -left-40 -top-32 h-[48rem] w-[48rem] rounded-full bg-emerald-500/15 blur-3xl" />
-            <div className="absolute -right-48 bottom-[-10%] h-[44rem] w-[44rem] rounded-full bg-emerald-300/10 blur-3xl" />
+            <div className="absolute -left-40 -top-32 h-[48rem] w-[48rem] rounded-full bg-emerald-500/15 blur-3xl animate-pulse" />
+            <div className="absolute -right-48 bottom-[-10%] h-[44rem] w-[44rem] rounded-full bg-emerald-300/10 blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[32rem] w-[32rem] rounded-full bg-blue-500/5 blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
             <div
               aria-hidden="true"
               className="absolute inset-0 opacity-[0.07] mix-blend-soft-light"
@@ -38,27 +104,32 @@ const LandingPage = () => {
             />
           </div>
 
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:py-24 md:grid-cols-2 md:items-center lg:py-28">
-            <div className="space-y-7">
-              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:py-24 md:grid-cols-2 md:items-center lg:py-32">
+            <div className="space-y-8 animate-fade-in-up">
+              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-300 animate-bounce-subtle">
+                <Sparkles className="mr-2 h-4 w-4" />
                 Built for modern event teams
               </div>
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                Effortless orchestration for exceptional events.
+              <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl bg-gradient-to-r from-white via-white to-emerald-300 bg-clip-text text-transparent">
+                Effortless orchestration for{' '}
+                <span className="text-emerald-400">exceptional events</span>
               </h1>
-              <p className="text-base leading-relaxed text-neutral-300 sm:text-lg">
+              <p className="text-lg leading-relaxed text-neutral-300 sm:text-xl max-w-2xl">
                 EventFlow unifies planning, guest workflows, vendor operations, and real‑time insights—empowering your team to deliver flawless experiences at any scale.
               </p>
               {!isAuthenticated ? (
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900">
-                    <Link to="/register">Get Started</Link>
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900 text-lg px-8 py-6 group">
+                    <Link to="/register">
+                      Get Started Free
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </Button>
                   <Button
                     asChild
                     size="lg"
                     variant="outline"
-                    className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
+                    className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent text-lg px-8 py-6"
                   >
                     <Link to="/login">Login</Link>
                   </Button>
@@ -68,40 +139,48 @@ const LandingPage = () => {
                   <Button
                     asChild
                     size="lg"
-                    className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900"
+                    className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900 text-lg px-8 py-6 group"
                   >
                     <Link to={user?.role === 'admin' ? '/admin' : '/dashboard'}>
                       Go to Dashboard
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
                 </div>
               )}
-              <p className="text-xs text-neutral-400">No credit card required. Set up in minutes.</p>
+              <p className="text-sm text-neutral-400 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                No credit card required • Set up in minutes • 14-day free trial
+              </p>
             </div>
 
             {/* Quick highlights card */}
-            <Card className="border-neutral-800 bg-neutral-900/60 backdrop-blur">
+            <Card className="border-neutral-800 bg-neutral-900/60 backdrop-blur shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               <CardContent className="p-6 sm:p-8">
                 <div className="grid gap-6">
                   <Highlight
                     icon={<CalendarCheck className="h-6 w-6" aria-hidden="true" />}
                     title="Timelines in minutes"
                     description="Drag‑and‑drop schedules with automated reminders and conflict prevention."
+                    delay="0.1s"
                   />
                   <Highlight
                     icon={<Users className="h-6 w-6" aria-hidden="true" />}
                     title="Guest lists that sync"
                     description="Smart RSVPs, seating, and check‑in with live updates across teams."
+                    delay="0.2s"
                   />
                   <Highlight
                     icon={<BadgeDollarSign className="h-6 w-6" aria-hidden="true" />}
                     title="Budgets under control"
                     description="Vendor management, payment milestones, and clear cost controls."
+                    delay="0.3s"
                   />
                   <Highlight
                     icon={<BarChart3 className="h-6 w-6" aria-hidden="true" />}
                     title="Insights that matter"
                     description="Live dashboards and post‑event reports to optimize outcomes."
+                    delay="0.4s"
                   />
                 </div>
               </CardContent>
@@ -109,118 +188,289 @@ const LandingPage = () => {
           </div>
         </section>
 
+        {/* Stats Section */}
+        <section className="bg-neutral-950 border-b border-neutral-800">
+          <div className="mx-auto max-w-7xl px-4 py-16">
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl font-bold text-emerald-400 sm:text-4xl">{stat.number}</div>
+                  <div className="mt-2 text-sm text-neutral-400">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Features */}
-        <section id="features" className="border-t border-neutral-800 bg-neutral-950">
+        <section id="features" className={`border-t border-neutral-800 bg-neutral-950 transition-all duration-1000 ${isVisible.features ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl font-bold sm:text-3xl">Everything you need to run outstanding events</h2>
-              <p className="mt-3 text-neutral-300">
+            <div className="mx-auto max-w-3xl text-center mb-16">
+              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-300 mb-6">
+                <Zap className="mr-2 h-4 w-4" />
+                Powerful Features
+              </div>
+              <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl bg-gradient-to-r from-white to-emerald-300 bg-clip-text text-transparent">
+                Everything you need to run outstanding events
+              </h2>
+              <p className="mt-4 text-lg text-neutral-300">
                 From kickoff to wrap‑up, manage every detail in one streamlined hub.
               </p>
             </div>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               <Feature
-                icon={<CalendarCheck className="h-6 w-6" aria-hidden="true" />}
+                icon={<CalendarCheck className="h-7 w-7" aria-hidden="true" />}
                 title="Intuitive scheduling & tracking"
-                description="Plan agendas, assign tasks, and monitor progress with visual timelines."
+                description="Plan agendas, assign tasks, and monitor progress with visual timelines that update in real-time."
+                color="emerald"
               />
               <Feature
-                icon={<Users className="h-6 w-6" aria-hidden="true" />}
+                icon={<Users className="h-7 w-7" aria-hidden="true" />}
                 title="Guest management & invitations"
-                description="Automate invites, RSVPs, and reminders with customizable templates."
+                description="Automate invites, RSVPs, and reminders with customizable templates and smart check-in."
+                color="blue"
               />
               <Feature
-                icon={<BadgeDollarSign className="h-6 w-6" aria-hidden="true" />}
+                icon={<BadgeDollarSign className="h-7 w-7" aria-hidden="true" />}
                 title="Budget & vendor coordination"
-                description="Track expenses, manage vendors, and control approvals in one place."
+                description="Track expenses, manage vendors, and control approvals with integrated payment processing."
+                color="purple"
               />
               <Feature
-                icon={<BarChart3 className="h-6 w-6" aria-hidden="true" />}
+                icon={<BarChart3 className="h-7 w-7" aria-hidden="true" />}
                 title="Real‑time analytics & reporting"
-                description="Understand attendance, costs, and engagement with live dashboards."
+                description="Understand attendance, costs, and engagement with live dashboards and detailed insights."
+                color="orange"
+              />
+              <Feature
+                icon={<Shield className="h-7 w-7" aria-hidden="true" />}
+                title="Enterprise security"
+                description="Bank-level encryption, SSO integration, and compliance with GDPR and SOC 2 standards."
+                color="red"
+              />
+              <Feature
+                icon={<Globe className="h-7 w-7" aria-hidden="true" />}
+                title="Global scalability"
+                description="Multi-language support, timezone handling, and infrastructure that scales worldwide."
+                color="green"
               />
             </div>
           </div>
         </section>
 
         {/* Why Choose Us */}
-        <section id="why" className="bg-neutral-950">
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:py-20 lg:grid-cols-2">
-            <div className="space-y-4">
-              <div className="inline-block rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
+        <section id="why" className={`bg-neutral-950 transition-all duration-1000 ${isVisible.why ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:py-20 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div className="inline-flex items-center rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">
+                <Target className="mr-2 h-4 w-4" />
                 Why EventFlow
               </div>
-              <h2 className="text-2xl font-bold sm:text-3xl">
-                Save time, reduce stress, and deliver unforgettable events.
+              <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+                Save time, reduce stress, and deliver{' '}
+                <span className="text-emerald-400">unforgettable events</span>
               </h2>
-              <p className="text-neutral-300">
-                Our unified, user‑friendly platform brings planners, vendors, and guests together—so you can focus on the moments that matter.
+              <p className="text-lg text-neutral-300">
+                Our unified, user‑friendly platform brings planners, vendors, and guests together—so you can focus on the moments that matter most.
               </p>
-              <ul className="grid gap-3 text-sm text-neutral-200">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-400" aria-hidden="true" />
-                  All‑in‑one workflows from planning to post‑event insights
+              <ul className="grid gap-4 text-base text-neutral-200">
+                <li className="flex items-start gap-4">
+                  <div className="rounded-full bg-emerald-500/20 p-1">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <strong className="text-white">All‑in‑one workflows</strong>
+                    <p className="text-sm text-neutral-400 mt-1">From planning to post‑event insights, everything in one platform</p>
+                  </div>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-400" aria-hidden="true" />
-                  Collaboration built‑in for teams and stakeholders
+                <li className="flex items-start gap-4">
+                  <div className="rounded-full bg-emerald-500/20 p-1">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <strong className="text-white">Built-in collaboration</strong>
+                    <p className="text-sm text-neutral-400 mt-1">Real-time teamwork for all stakeholders and vendors</p>
+                  </div>
                 </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-400" aria-hidden="true" />
-                  Secure, scalable, and ready for events of any size
+                <li className="flex items-start gap-4">
+                  <div className="rounded-full bg-emerald-500/20 p-1">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <strong className="text-white">Enterprise-ready</strong>
+                    <p className="text-sm text-neutral-400 mt-1">Secure, scalable, and ready for events of any size</p>
+                  </div>
                 </li>
               </ul>
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900">
+                  <Link to="/register">Start Free Trial</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
+                  onClick={() => {
+                    const element = document.getElementById('contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  <span>Schedule Demo</span>
+                </Button>
+              </div>
             </div>
-            <div className="relative h-64 w-full overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-sm sm:h-80">
-              <div className="flex items-center justify-center h-full text-neutral-500">
-                <BarChart3 className="h-24 w-24" />
+            <div className="relative">
+              <div className="relative h-80 w-full overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl sm:h-96">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-blue-500/10" />
+                <div className="flex items-center justify-center h-full">
+                  <div className="grid grid-cols-2 gap-4 p-8">
+                    <div className="bg-neutral-800 rounded-lg p-4 text-center">
+                      <TrendingUp className="h-8 w-8 text-emerald-400 mx-auto mb-2" />
+                      <div className="text-2xl font-bold text-white">95%</div>
+                      <div className="text-xs text-neutral-400">Success Rate</div>
+                    </div>
+                    <div className="bg-neutral-800 rounded-lg p-4 text-center">
+                      <Clock className="h-8 w-8 text-blue-400 mx-auto mb-2" />
+                      <div className="text-2xl font-bold text-white">60%</div>
+                      <div className="text-xs text-neutral-400">Time Saved</div>
+                    </div>
+                    <div className="bg-neutral-800 rounded-lg p-4 text-center">
+                      <UserCheck className="h-8 w-8 text-purple-400 mx-auto mb-2" />
+                      <div className="text-2xl font-bold text-white">98%</div>
+                      <div className="text-xs text-neutral-400">Satisfaction</div>
+                    </div>
+                    <div className="bg-neutral-800 rounded-lg p-4 text-center">
+                      <Globe className="h-8 w-8 text-orange-400 mx-auto mb-2" />
+                      <div className="text-2xl font-bold text-white">50+</div>
+                      <div className="text-xs text-neutral-400">Countries</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Testimonials / Trust */}
-        <section id="testimonials" className="border-t border-neutral-800 bg-neutral-950">
+        <section id="testimonials" className={`border-t border-neutral-800 bg-neutral-950 transition-all duration-1000 ${isVisible.testimonials ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
-            <div className="mx-auto max-w-3xl text-center">
-              <Quote className="mx-auto h-10 w-10 text-emerald-400" aria-hidden="true" />
-              <p className="mt-4 text-xl font-medium">
-                "EventFlow has transformed our operations—our team executes faster and our clients notice the difference."
-              </p>
-              <p className="mt-2 text-sm text-neutral-400">— Alex Nguyen, Director of Events at BrightWorks</p>
+            <div className="mx-auto max-w-3xl text-center mb-16">
+              <div className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-300 mb-6">
+                <Quote className="mr-2 h-4 w-4" />
+                Customer Stories
+              </div>
+              <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl bg-gradient-to-r from-white to-emerald-300 bg-clip-text text-transparent">
+                Trusted by event professionals worldwide
+              </h2>
             </div>
 
-            <div className="mt-10 grid items-center justify-center gap-8 sm:grid-cols-3 lg:grid-cols-5">
-              <ClientLogo alt="Client logo 1" />
-              <ClientLogo alt="Client logo 2" />
-              <ClientLogo alt="Client logo 3" />
-              <ClientLogo alt="Client logo 4" />
-              <ClientLogo alt="Client logo 5" />
+            <div className="relative">
+              <div className="mx-auto max-w-4xl">
+                <div className="relative min-h-[200px] flex items-center justify-center">
+                  {testimonials.map((testimonial, index) => (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 transition-all duration-500 ${
+                        index === currentTestimonial 
+                          ? 'opacity-100 transform translate-x-0' 
+                          : index < currentTestimonial 
+                            ? 'opacity-0 transform -translate-x-full' 
+                            : 'opacity-0 transform translate-x-full'
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="flex justify-center mb-6">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                        <blockquote className="text-xl font-medium text-white sm:text-2xl">
+                          "{testimonial.quote}"
+                        </blockquote>
+                        <div className="mt-6">
+                          <div className="font-semibold text-emerald-300">{testimonial.author}</div>
+                          <div className="text-sm text-neutral-400">{testimonial.role}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex justify-center mt-8 gap-2">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`h-2 w-8 rounded-full transition-all ${
+                      index === currentTestimonial ? 'bg-emerald-400' : 'bg-neutral-600 hover:bg-neutral-500'
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-16 grid items-center justify-center gap-8 sm:grid-cols-3 lg:grid-cols-5 opacity-60">
+              <ClientLogo alt="TechCorp" />
+              <ClientLogo alt="BrightWorks" />
+              <ClientLogo alt="Global Dynamics" />
+              <ClientLogo alt="Innovation Labs" />
+              <ClientLogo alt="Future Events" />
             </div>
           </div>
         </section>
 
         {/* Secondary CTA */}
-        <section id="cta" className="bg-neutral-950">
-          <div className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-16 sm:py-20 lg:grid-cols-[1fr_auto]">
-            <div>
-              <h2 className="text-2xl font-bold sm:text-3xl">Ready to elevate your event operations?</h2>
-              <p className="mt-2 text-neutral-300">
-                Join teams delivering seamless experiences—from intimate gatherings to large‑scale conferences.
+        <section id="cta" className="bg-gradient-to-r from-neutral-950 via-neutral-900 to-neutral-950 relative">
+          <div className="absolute inset-0 bg-emerald-500/5" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 py-20 sm:py-24 lg:grid-cols-[1fr_auto]">
+            <div className="text-center lg:text-left">
+              <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+                Ready to elevate your{' '}
+                <span className="text-emerald-400">event operations?</span>
+              </h2>
+              <p className="mt-4 text-lg text-neutral-300 max-w-2xl">
+                Join thousands of event professionals delivering seamless experiences—from intimate gatherings to large‑scale conferences.
               </p>
+              <div className="flex items-center justify-center lg:justify-start gap-6 mt-6 text-sm text-neutral-400">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  14-day free trial
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  No setup fees
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  Cancel anytime
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900">
-                <Link to="/register">Sign Up Now</Link>
+            <div className="flex flex-col gap-4 sm:flex-row lg:flex-col">
+              <Button asChild size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-neutral-900 text-lg px-8 py-6 group">
+                <Link to="/register">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
               <Button
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent"
+                className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10 bg-transparent text-lg px-8 py-6"
               >
-                <Link to="#features">Learn More</Link>
+                <button
+                  onClick={() => {
+                    const element = document.getElementById('contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Schedule Demo
+                </button>
               </Button>
             </div>
           </div>
@@ -228,69 +478,117 @@ const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer id="contact" className="border-t border-neutral-800 bg-neutral-950">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="space-y-3">
+      <footer id="contact" className={`border-t border-neutral-800 bg-neutral-950 transition-all duration-1000 ${isVisible.contact ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-4 lg:col-span-2">
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-500 text-neutral-900 font-extrabold">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-emerald-500 text-neutral-900 font-extrabold text-lg">
                 EF
               </span>
-              <span className="font-semibold tracking-wide">EventFlow</span>
+              <span className="font-semibold tracking-wide text-xl">EventFlow</span>
             </div>
-            <p className="text-sm text-neutral-400">
-              Professional, approachable, and built for reliability and innovation.
+            <p className="text-neutral-400 max-w-md">
+              Professional, approachable, and built for reliability and innovation. Transform your event management experience today.
             </p>
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-neutral-200">Get in touch</p>
+              <div className="flex flex-col gap-1 text-sm text-neutral-400">
+                <p>📧 hello@eventflow.com</p>
+                <p>📞 +1 (555) 123-4567</p>
+                <p>🏢 123 Innovation Street, Tech City, TC 12345</p>
+              </div>
+            </div>
           </div>
-          <nav aria-label="Footer" className="grid gap-2 text-sm">
-            <span className="font-semibold text-neutral-200">Quick Links</span>
-            <Link to="/" className="text-neutral-400 hover:text-emerald-300">
-              About
-            </Link>
-            <Link to="#features" className="text-neutral-400 hover:text-emerald-300">
-              Features
-            </Link>
-            <Link to="#contact" className="text-neutral-400 hover:text-emerald-300">
-              Contact
-            </Link>
+          
+          <nav aria-label="Footer" className="space-y-4">
+            <span className="font-semibold text-neutral-200 text-lg">Product</span>
+            <div className="grid gap-3 text-sm">
+              <button
+                onClick={() => {
+                  const element = document.getElementById('features');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-neutral-400 hover:text-emerald-300 text-left bg-transparent border-0 cursor-pointer"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => {
+                  const element = document.getElementById('why');
+                  element?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-neutral-400 hover:text-emerald-300 text-left bg-transparent border-0 cursor-pointer"
+              >
+                Why EventFlow
+              </button>
+              <Link to="/register" className="text-neutral-400 hover:text-emerald-300">
+                Pricing
+              </Link>
+              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+                API Docs
+              </Link>
+            </div>
           </nav>
-          <div className="space-y-3">
-            <span className="font-semibold text-neutral-200">Follow Us</span>
-            <div className="flex items-center gap-3">
-              <Link
-                aria-label="Twitter"
-                to="#"
-                className="rounded-md p-2 text-neutral-400 hover:bg-neutral-900 hover:text-emerald-300"
-              >
-                <Twitter className="h-5 w-5" />
+          
+          <div className="space-y-4">
+            <span className="font-semibold text-neutral-200 text-lg">Company</span>
+            <div className="grid gap-3 text-sm">
+              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+                About Us
               </Link>
-              <Link
-                aria-label="Facebook"
-                to="#"
-                className="rounded-md p-2 text-neutral-400 hover:bg-neutral-900 hover:text-emerald-300"
-              >
-                <Facebook className="h-5 w-5" />
+              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+                Careers
               </Link>
-              <Link
-                aria-label="LinkedIn"
-                to="#"
-                className="rounded-md p-2 text-neutral-400 hover:bg-neutral-900 hover:text-emerald-300"
-              >
-                <Linkedin className="h-5 w-5" />
+              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+                Blog
               </Link>
+              <Link to="#" className="text-neutral-400 hover:text-emerald-300">
+                Press Kit
+              </Link>
+            </div>
+            
+            <div className="space-y-3 pt-4">
+              <span className="font-semibold text-neutral-200">Follow Us</span>
+              <div className="flex items-center gap-3">
+                <Link
+                  aria-label="Twitter"
+                  to="#"
+                  className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
+                >
+                  <Twitter className="h-5 w-5" />
+                </Link>
+                <Link
+                  aria-label="Facebook"
+                  to="#"
+                  className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
+                >
+                  <Facebook className="h-5 w-5" />
+                </Link>
+                <Link
+                  aria-label="LinkedIn"
+                  to="#"
+                  className="rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-emerald-300 transition-colors"
+                >
+                  <Linkedin className="h-5 w-5" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
         <div className="border-t border-neutral-800">
-          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-neutral-500 sm:flex-row">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-neutral-500 sm:flex-row">
             <p>
               © {new Date().getFullYear()} EventFlow. All rights reserved.
             </p>
-            <div className="flex items-center gap-4">
-              <Link to="#" className="hover:text-emerald-300">
-                Privacy
+            <div className="flex items-center gap-6">
+              <Link to="#" className="hover:text-emerald-300 transition-colors">
+                Privacy Policy
               </Link>
-              <Link to="#" className="hover:text-emerald-300">
-                Terms
+              <Link to="#" className="hover:text-emerald-300 transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="#" className="hover:text-emerald-300 transition-colors">
+                Cookie Policy
               </Link>
             </div>
           </div>
@@ -300,26 +598,37 @@ const LandingPage = () => {
   );
 };
 
-function Highlight({ icon, title, description }) {
+function Highlight({ icon, title, description, delay = "0s" }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="rounded-md bg-emerald-500/10 p-2 text-emerald-300">{icon}</div>
+    <div className="flex items-start gap-4 animate-fade-in-up" style={{ animationDelay: delay }}>
+      <div className="rounded-md bg-emerald-500/10 p-3 text-emerald-300 ring-1 ring-emerald-500/20">{icon}</div>
       <div>
-        <h3 className="font-semibold text-neutral-100">{title}</h3>
-        <p className="text-sm text-neutral-300">{description}</p>
+        <h3 className="font-semibold text-neutral-100 text-lg">{title}</h3>
+        <p className="text-sm text-neutral-300 mt-1">{description}</p>
       </div>
     </div>
   );
 }
 
-function Feature({ icon, title, description }) {
+function Feature({ icon, title, description, color = "emerald" }) {
+  const colorClasses = {
+    emerald: "text-emerald-300 bg-emerald-500/10 ring-emerald-500/20",
+    blue: "text-blue-300 bg-blue-500/10 ring-blue-500/20",
+    purple: "text-purple-300 bg-purple-500/10 ring-purple-500/20",
+    orange: "text-orange-300 bg-orange-500/10 ring-orange-500/20",
+    red: "text-red-300 bg-red-500/10 ring-red-500/20",
+    green: "text-green-300 bg-green-500/10 ring-green-500/20",
+  };
+
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5 shadow-sm transition-colors hover:border-neutral-700/80">
+    <div className="group rounded-2xl border border-neutral-800 bg-neutral-900/60 backdrop-blur p-6 shadow-sm transition-all hover:border-neutral-700/80 hover:shadow-lg hover:shadow-emerald-500/5 hover:-translate-y-1">
       <div className="flex items-start gap-4">
-        <div className="rounded-md bg-emerald-500/10 p-2 text-emerald-300">{icon}</div>
+        <div className={`rounded-lg p-3 ring-1 transition-all group-hover:scale-110 ${colorClasses[color]}`}>
+          {icon}
+        </div>
         <div>
-          <h3 className="font-semibold text-neutral-100">{title}</h3>
-          <p className="mt-1 text-sm text-neutral-300">{description}</p>
+          <h3 className="font-semibold text-neutral-100 text-lg group-hover:text-white transition-colors">{title}</h3>
+          <p className="mt-2 text-sm text-neutral-300 group-hover:text-neutral-200 transition-colors leading-relaxed">{description}</p>
         </div>
       </div>
     </div>
@@ -328,8 +637,8 @@ function Feature({ icon, title, description }) {
 
 function ClientLogo({ alt }) {
   return (
-    <div className="flex items-center justify-center">
-      <div className="h-8 w-32 bg-neutral-800 rounded flex items-center justify-center text-neutral-500 text-xs">
+    <div className="flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+      <div className="h-12 w-40 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-lg flex items-center justify-center text-neutral-400 text-sm font-medium border border-neutral-700">
         {alt}
       </div>
     </div>
