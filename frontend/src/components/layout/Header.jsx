@@ -111,15 +111,12 @@ const Header = () => {
             >
               Testimonials
             </button>
-            <button
-              onClick={() => {
-                const element = document.getElementById('contact');
-                element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}
-              className="hover:text-emerald-400 bg-transparent border-0 cursor-pointer transition-colors"
+            <Link
+              to="/contact-us"
+              className="hover:text-emerald-400 transition-colors"
             >
               Contact
-            </button>
+            </Link>
           </nav>
         )}
 
@@ -233,16 +230,13 @@ const Header = () => {
               >
                 Testimonials
               </button>
-              <button
-                onClick={() => {
-                  const element = document.getElementById('contact');
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  setShowMobileMenu(false);
-                }}
-                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 bg-transparent border-0 cursor-pointer transition-colors"
+              <Link
+                to="/contact-us"
+                onClick={() => setShowMobileMenu(false)}
+                className="block w-full text-left text-neutral-300 hover:text-emerald-400 py-2 transition-colors"
               >
                 Contact
-              </button>
+              </Link>
             </nav>
             <div className="space-y-3 pt-4 border-t border-neutral-800">
               <Button

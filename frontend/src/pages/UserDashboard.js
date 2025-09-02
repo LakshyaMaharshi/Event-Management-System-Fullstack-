@@ -490,11 +490,14 @@ function EventCard({ event, onAction }) {
         {/* Details Grid */}
         <div className="mb-4 space-y-3 text-sm">
           <DetailRow icon={<Calendar className="h-4 w-4" />} label="Date" value={formatDate(event.eventDate)} />
-          <DetailRow icon={<Clock className="h-4 w-4" />} label="Time" value={event.eventTime} />
-          <DetailRow icon={<MapPin className="h-4 w-4" />} label="Venue" value={event.venue} />
+          <DetailRow icon={<Clock className="h-4 w-4" />} label="Time" value={event.eventTime || "-"} />
           <DetailRow icon={<Users className="h-4 w-4" />} label="Capacity" value={`${event.capacity} people`} />
+          <DetailRow icon={<Layers3 className="h-4 w-4" />} label="Category" value={event.category} />
           {event.estimatedCost && (
-            <DetailRow icon={<DollarSign className="h-4 w-4" />} label="Budget" value={`$${event.estimatedCost}`} />
+            <DetailRow icon={<DollarSign className="h-4 w-4" />} label="Budget" value={`£${event.estimatedCost}`} />
+          )}
+          {event.duration && (
+            <DetailRow icon={<Clock className="h-4 w-4" />} label="Duration" value={event.duration} />
           )}
         </div>
 
@@ -783,7 +786,7 @@ function NotificationModal({ notifications, onMarkAsRead, onClose }) {
                       )}
                       {notification.eventId && (
                         <div className="mt-2 text-xs text-neutral-400">
-                          Event: {notification.eventId.title || 'Event'} • {new Date(notification.createdAt).toLocaleDateString()}
+                          Event: {notification.eventId.title || 'Event'} • {formatDate(notification.createdAt)}
                         </div>
                       )}
                     </div>
@@ -1004,7 +1007,13 @@ function DetailRow({ icon, label, value }) {
 function formatDate(val) {
   if (!val) return "-"
   try {
-    return new Date(val).toLocaleDateString()
+    const date = new Date(val)
+    if (isNaN(date.getTime())) return "-"
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
   } catch {
     return "-"
   }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, ExternalLink } from 'lucide-react';
+import { Mail, Send } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ const Footer = () => {
     // Create mailto link
     const subject = encodeURIComponent('Contact from EventFlow Website');
     const body = encodeURIComponent(`From: ${email}\n\nMessage:\n${message}`);
-    const mailtoLink = `mailto:mileekakadiyaworks@gmail.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:mileekakadiya@gmail.com?subject=${subject}&body=${body}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -35,7 +36,7 @@ const Footer = () => {
   return (
     <footer className="bg-neutral-900 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-emerald-400">EventFlow</h3>
@@ -43,24 +44,6 @@ const Footer = () => {
               Streamline your event planning process with our intelligent platform. 
               Create, track, and manage all your events in one powerful system.
             </p>
-            <div className="flex space-x-4">
-              <a 
-                href="https://twitter.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-emerald-400 transition-colors"
-              >
-                <ExternalLink className="h-5 w-5" />
-              </a>
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-emerald-400 transition-colors"
-              >
-                <ExternalLink className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -68,70 +51,26 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-neutral-100">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
+                <Link to="/" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/dashboard" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a href="/profile" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  Profile
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
+                <Link to="/contact-us" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
                   Contact Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
-
-          {/* Support */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-neutral-100">Support</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-                  Privacy Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-
           {/* Contact Form */}
           <div className="space-y-4" id="contact">
             <h4 className="text-lg font-semibold text-neutral-100">Contact Us</h4>
             <div className="space-y-3">
               <div className="flex items-center space-x-2 text-sm text-neutral-400">
                 <Mail className="h-4 w-4" />
-                <span>mileekakadiyaworks@gmail.com</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-neutral-400">
-                <Phone className="h-4 w-4" />
-                <span>+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-neutral-400">
-                <MapPin className="h-4 w-4" />
-                <span>Remote Office</span>
+                <a href="mailto:mileekakadiya@gmail.com" className="hover:text-emerald-400 transition-colors">
+                  mileekakadiya@gmail.com
+                </a>
               </div>
             </div>
             
@@ -169,17 +108,6 @@ const Footer = () => {
           <p className="text-neutral-400 text-sm">
             © {currentYear} EventFlow. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-              Terms of Service
-            </a>
-            <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-              Privacy Policy
-            </a>
-            <a href="#contact" className="text-neutral-400 hover:text-emerald-400 transition-colors text-sm">
-              Cookie Policy
-            </a>
-          </div>
         </div>
       </div>
     </footer>

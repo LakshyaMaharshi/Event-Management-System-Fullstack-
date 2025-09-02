@@ -400,11 +400,17 @@ function EmptyState({ icon, title, subtitle }) {
 function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPending }) {
   const formatDate = (dateString) => {
     if (!dateString) return 'TBD'
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    })
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return 'TBD'
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    } catch {
+      return 'TBD'
+    }
   }
 
   const formatTime = (timeString) => {
@@ -438,16 +444,24 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
           </div>
           
           <div className="flex items-center gap-2 text-sm text-neutral-300">
-            <MapPin className="h-4 w-4 text-neutral-400 flex-shrink-0" />
-            <span className="truncate">{event.venue || 'TBD'}</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-sm text-neutral-300">
             <Users className="h-4 w-4 text-neutral-400 flex-shrink-0" />
             <span className="truncate">{event.capacity || 0} capacity</span>
             <Tag className="ml-2 h-4 w-4 text-neutral-400 flex-shrink-0" />
             <span className="capitalize truncate">{event.category}</span>
           </div>
+
+          {event.duration && (
+            <div className="flex items-center gap-2 text-sm text-neutral-300">
+              <Clock className="h-4 w-4 text-neutral-400 flex-shrink-0" />
+              <span className="truncate">Duration: {event.duration}</span>
+            </div>
+          )}
+
+          {event.estimatedCost && (
+            <div className="flex items-center gap-2 text-sm text-neutral-300">
+              <span className="text-emerald-400">£{event.estimatedCost}</span>
+            </div>
+          )}
 
           {event.priority && (
             <div className="flex items-center gap-2">
@@ -518,20 +532,24 @@ function AdminEventCard({ event, onView, onApprove, onDeny, onComplete, isPendin
 // Event Detail Modal Component
 function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
+    if (!dateString) return 'TBD'
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return 'TBD'
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    } catch {
+      return 'TBD'
+    }
   }
 
-  const formatTime = (dateString) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    })
+  const formatTime = (timeString) => {
+    if (!timeString) return 'TBD'
+    return timeString
   }
 
   return (
@@ -569,40 +587,53 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
                   <h4 className="text-sm font-medium text-neutral-400 mb-2">Date & Time</h4>
                   <div className="flex items-center gap-2 text-neutral-100">
                     <Calendar className="h-4 w-4" />
-                    <span>{formatDate(event.date)}</span>
+                    <span>{formatDate(event.eventDate)}</span>
                   </div>
                   <div className="flex items-center gap-2 text-neutral-100 mt-1">
                     <Clock className="h-4 w-4" />
-                    <span>{formatTime(event.date)}</span>
+                    <span>{formatTime(event.eventTime)}</span>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-medium text-neutral-400 mb-2">Location</h4>
+                  <h4 className="text-sm font-medium text-neutral-400 mb-2">Category & Capacity</h4>
                   <div className="flex items-center gap-2 text-neutral-100">
-                    <MapPin className="h-4 w-4" />
-                    <span>{event.location}</span>
+                    <Tag className="h-4 w-4" />
+                    <span className="capitalize">{event.category}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-neutral-100 mt-1">
+                    <Users className="h-4 w-4" />
+                    <span>{event.capacity} people</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <div>
-                  <h4 className="text-sm font-medium text-neutral-400 mb-2">Category & Priority</h4>
-                  <div className="flex items-center gap-2 text-neutral-100 mb-2">
-                    <Tag className="h-4 w-4" />
-                    <span className="capitalize">{event.category}</span>
+                {event.priority && (
+                  <div>
+                    <h4 className="text-sm font-medium text-neutral-400 mb-2">Priority</h4>
+                    <PriorityBadge priority={event.priority} />
                   </div>
-                  {event.priority && <PriorityBadge priority={event.priority} />}
-                </div>
+                )}
 
-                <div>
-                  <h4 className="text-sm font-medium text-neutral-400 mb-2">Attendees</h4>
-                  <div className="flex items-center gap-2 text-neutral-100">
-                    <Users className="h-4 w-4" />
-                    <span>{event.attendees || 0} expected</span>
+                {event.estimatedCost && (
+                  <div>
+                    <h4 className="text-sm font-medium text-neutral-400 mb-2">Budget</h4>
+                    <div className="flex items-center gap-2 text-neutral-100">
+                      <span className="text-emerald-400 font-semibold">£{event.estimatedCost}</span>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {event.duration && (
+                  <div>
+                    <h4 className="text-sm font-medium text-neutral-400 mb-2">Duration</h4>
+                    <div className="flex items-center gap-2 text-neutral-100">
+                      <Clock className="h-4 w-4" />
+                      <span>{event.duration}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -610,6 +641,62 @@ function EventDetailModal({ event, onClose, onApprove, onDeny, onComplete }) {
             <div>
               <h4 className="text-sm font-medium text-neutral-400 mb-2">Description</h4>
               <p className="text-neutral-100 leading-relaxed">{event.description}</p>
+            </div>
+
+            {/* Contact Information */}
+            {event.contactPerson && (
+              <div>
+                <h4 className="text-sm font-medium text-neutral-400 mb-2">Contact Person</h4>
+                <div className="bg-neutral-800 rounded-lg p-4 space-y-2">
+                  {event.contactPerson.name && (
+                    <div className="flex items-center gap-2 text-neutral-100">
+                      <Users className="h-4 w-4" />
+                      <span>{event.contactPerson.name}</span>
+                    </div>
+                  )}
+                  {event.contactPerson.email && (
+                    <div className="flex items-center gap-2 text-neutral-100">
+                      <span className="text-emerald-400">✉</span>
+                      <a href={`mailto:${event.contactPerson.email}`} className="text-emerald-400 hover:underline">
+                        {event.contactPerson.email}
+                      </a>
+                    </div>
+                  )}
+                  {event.contactPerson.phone && (
+                    <div className="flex items-center gap-2 text-neutral-100">
+                      <span className="text-emerald-400">📞</span>
+                      <a href={`tel:${event.contactPerson.phone}`} className="text-emerald-400 hover:underline">
+                        {event.contactPerson.phone}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Submitter Information */}
+            <div>
+              <h4 className="text-sm font-medium text-neutral-400 mb-2">Submitted By</h4>
+              <div className="bg-neutral-800 rounded-lg p-4 space-y-2">
+                <div className="flex items-center gap-2 text-neutral-100">
+                  <Users className="h-4 w-4" />
+                  <span>{event.submittedBy?.name || 'Unknown User'}</span>
+                </div>
+                {event.submittedBy?.email && (
+                  <div className="flex items-center gap-2 text-neutral-100">
+                    <span className="text-emerald-400">✉</span>
+                    <a href={`mailto:${event.submittedBy.email}`} className="text-emerald-400 hover:underline">
+                      {event.submittedBy.email}
+                    </a>
+                  </div>
+                )}
+                {event.submittedBy?.organization && (
+                  <div className="flex items-center gap-2 text-neutral-100">
+                    <span className="text-neutral-400">🏢</span>
+                    <span>{event.submittedBy.organization}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Tags */}
