@@ -140,17 +140,6 @@ export default function ProfilePage() {
       </div>
     )
   }
-          confirmPassword: '',
-        })
-        alert('Password changed successfully!')
-      }
-    } catch (error) {
-      console.error('Failed to change password:', error)
-      alert('Failed to change password. Please check your current password and try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const cancelEdit = () => {
     setIsEditing(false)

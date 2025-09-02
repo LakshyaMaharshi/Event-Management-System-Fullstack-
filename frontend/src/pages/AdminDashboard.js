@@ -9,7 +9,7 @@ import StatusBadge, { PriorityBadge } from "../components/status-badge"
 import { 
   Calendar, Clock, MapPin, Users, BarChart3, ClipboardList,
   CheckCircle2 as CheckCircle, XCircle as X, XCircle,
-  Zap, Filter, Search, Eye, TrendingUp, Award, AlertTriangle,
+  Zap, Eye, TrendingUp, Award, AlertTriangle,
   Check, Tag
 } from "lucide-react"
 
@@ -19,8 +19,6 @@ export default function AdminDashboard() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [analytics, setAnalytics] = useState(null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filterCategory, setFilterCategory] = useState('all')
   const [selectedEvent, setSelectedEvent] = useState(null)
 
   useEffect(() => {
@@ -90,14 +88,7 @@ export default function AdminDashboard() {
     }
   }
 
-  const filteredEvents = events.filter(event => {
-    const matchesSearch = !searchQuery || 
-      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.submittedBy?.name.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = filterCategory === 'all' || event.category === filterCategory
-    return matchesSearch && matchesCategory
-  })
+  const filteredEvents = events
 
   const getEventStats = () => {
     const total = events.length
@@ -290,13 +281,11 @@ export default function AdminDashboard() {
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {filteredEvents.map((event) => (
-                  <EventCard 
+                  <AdminEventCard 
                     key={event._id} 
                     event={event} 
-                    onApprove={handleApprove}
-                    onDeny={handleDeny}
-                    onComplete={handleComplete}
-                    onViewDetails={setSelectedEvent}
+                    onView={() => setSelectedEvent(event)}
+                    isPending={false}
                     showActions={false} // Don't show approve/deny actions for denied events
                   />
                 ))}

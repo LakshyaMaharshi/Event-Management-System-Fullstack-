@@ -8,7 +8,8 @@ import { Card, CardContent } from "../components/ui/card"
 import StatusBadge, { PriorityBadge } from "../components/status-badge"
 import { 
   Calendar, Clock, MapPin, Layers3, RefreshCw, Plus, Bell, Star, 
-  Filter, Search, Bookmark, DollarSign, Users, AlertCircle 
+  Filter, Search, Bookmark, DollarSign, Users, AlertCircle, 
+  CheckCircle, X
 } from "lucide-react"
 
 export default function UserDashboard() {
